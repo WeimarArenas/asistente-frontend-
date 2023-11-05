@@ -1,0 +1,69 @@
+.containerCardLogin{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-color: #ededed;
+}
+
+.cardLogin{
+    display: flex;
+    flex-direction: column;
+    margin-top: 8%;
+    padding: 50px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #4361ee;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
+}
+
+.cardLoginInputPassword{
+    margin-top: 50px;
+}
+
+.cardLoginInputUser, .cardLoginInputPassword{
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffff;
+}
+
+.cardLoginInputPassword > input{
+    box-shadow: 0px 4px 8px rgba(29, 29, 29, 0.8);
+}
+
+.cardLoginInputUser > input{
+    box-shadow: 0px 4px 8px rgba(29, 29, 29, 0.8);
+}
+
+.cardLoginIngresar{
+    margin-top: 30px;
+}
+
+.cardLoginButtonLogin{
+    margin-top: 40px;
+}
+
+.cardLoginButtonLogin{
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+}
+
+.cardLoginButtonLogin:hover{
+    background-color: #7209b7;
+}
+
+.cardLoginButtonLoginText {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+    font-weight: 600;
+    transition: color 0.3s; /* Añade una transición para suavizar el cambio de color */
+}
+
+.cardLoginButtonLoginText:hover {
+    color: white; /* Cambia el color del texto a blanco cuando pasas el cursor por encima */
+}
+

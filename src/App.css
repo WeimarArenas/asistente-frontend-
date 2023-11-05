@@ -1,0 +1,32 @@
+h1{
+  text-align: center;
+  color: red;
+}
+
+/* Estilos para el cuerpo de la tabla */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+/* Estilos para las filas impares (alternar colores) */
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Estilos para el encabezado de la tabla */
+th {
+  background-color: #0074d9;
+  color: white;
+}
+
+/* Alineación del texto en las celdas de la tabla */
+td, th {
+  text-align: center;
+}

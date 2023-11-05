@@ -1,0 +1,55 @@
+.header {
+    width: 100%;
+    height: 30px;
+    background-color: #f8f8f8;
+}
+
+.headerMenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerMenu li {
+    position: relative;
+}
+
+.headerMenu li a{
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    color: black;
+}
+
+.headerMenuItemStart{
+    margin-left: 15px;
+}
+
+.headerMenuItemEnd{
+    margin-right: 15px;
+}
+
+.headerMenu li ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 150px; /* Ajusta el ancho del submenú según sea necesario */
+    list-style-type: none; /* Ojo con quitar esto, esto oculta las viñetas del sub menu*/
+}
+
+.headerMenu li ul li a {
+    text-decoration: none;
+}
+
+.headerMenu li:hover ul {
+    display: block;
+}
