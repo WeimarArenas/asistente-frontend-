@@ -24,6 +24,73 @@ function Areas() {
 		return equipo.nombre.toLowerCase().includes(query.toLowerCase());
 	}) : [];
 
+	// almacenar el estado de la consulta actual de las 4 posibles consultas que se le hacen al equipo
+	const [selectedConsulta, setSelectedConsulta] = useState(null);
+
+	// Si el tipo de consulta es para registro invima
+	const [registrosInvima, setRegistrosInvima] = useState(null);
+	const [showTablaRegistrosInvima, setShowTablaRegistrosInvima] = useState(false);
+
+	// logica para el form del invima
+	const [editableFields, setEditableFields] = useState({
+  	numero_registro: "",
+  	vigencia: "",
+  	fecha: ""
+	});
+
+	const handleChangeEditable = (e) => {
+  	const { name, value } = e.target;
+  	setEditableFields({ ...editableFields, [name]: value });
+	};
+
+	const handleSaveChanges = () => {
+  	// Aquí puedes implementar la lógica para guardar los cambios
+  	// Por ejemplo, puedes hacer una petición al servidor para actualizar los datos.
+	};
+
+	// formulario invima
+	const renderFormularioRegistrosInvima = () => {
+		const registro = registrosInvima ? registrosInvima[0] : null; // Verificar si registrosInvima está definido
+	
+		return (
+			<form>
+				{registro && (
+					<div>
+						<div>
+							<label>Número de Registro:</label>
+							<input
+								type="text"
+								name="numero_registro"
+								value={editableFields.numero_registro || registro.numero_registro}
+								onChange={handleChangeEditable}
+							/>
+						</div>
+						<div>
+							<label>Vigencia:</label>
+							<input
+								type="text"
+								name="vigencia"
+								value={editableFields.vigencia || registro.vigencia}
+								onChange={handleChangeEditable}
+							/>
+						</div>
+						<div>
+							<label>Fecha:</label>
+							<input
+								type="text"
+								name="fecha"
+								value={editableFields.fecha || registro.fecha}
+								onChange={handleChangeEditable}
+							/>
+						</div>
+					</div>
+				)}
+				<button type="button" onClick={handleSaveChanges}>Guardar</button>
+			</form>
+		);
+	};
+	
+
 	// espacio de busqueda que estará leyendo cada letra ingresada y filtrando los datos
 	const handleSearchChange = (e) => {
 		setQuery(e.target.value);
@@ -55,10 +122,52 @@ function Areas() {
 			.then(response => response.json())
 			.then(data => {
 				setSelectedEquipo(data.equipos);
+				console.log(data)
 			})
 			.catch(error => console.error('Error:', error));
 
 		setShowModal(false);
+	};
+
+	// hangler de los 4 tipos de consultas posibles
+	const handleConsultaClick = (tipoConsulta) => {
+		setSelectedConsulta(tipoConsulta);
+
+		// Hacer la solicitud HTTP según el tipo de consulta
+		const idEquipo = selectedEquipoInfo.id; // Obtener el ID del equipo
+		let endpoint;
+
+		switch (tipoConsulta) {
+			case "invima":
+				endpoint = `http://127.0.0.1:5000/equipos/registros-invima/${idEquipo}`;
+				break;
+			case "mantenimientos":
+				endpoint = `http://127.0.0.1:5000/equipos/mantenimientos/${idEquipo}`;
+				break;
+			case "eventos":
+				endpoint = `http://127.0.0.1:5000/equipos/eventos/${idEquipo}`;
+				break;
+			case "calibraciones":
+				endpoint = `http://127.0.0.1:5000/equipos/calibraciones/${idEquipo}`;
+				break;
+			default:
+				break;
+		};
+
+		fetch(endpoint)
+			.then(response => response.json())
+			.then(data => {
+				switch (tipoConsulta) {
+					case "invima":
+						setRegistrosInvima(data.registros_invima);
+						setShowTablaRegistrosInvima(true);
+						break;
+					// ... (otros casos)
+					default:
+						break;
+				}
+			})
+			.catch(error => console.error('Error:', error));
 	};
 
 	return (
@@ -128,7 +237,7 @@ function Areas() {
 				</div>
 			)}
 
-		{/* Aca va el modal que mostrará la informacion que puede consultar de cada equipo */}
+			{/* Aca va el modal que mostrará la informacion que puede consultar de cada equipo */}
 			{showModalEquipo && (
 				<div className="modalConsultasEquipo">
 					<div className="modal-content">
@@ -138,10 +247,10 @@ function Areas() {
 									<p>Nombre Equipo: {selectedEquipoInfo.nombre}</p>
 								</div>
 								<div className='modal-content-consulta-buttons'>
-									<button>Revisar registro invima</button>
-									<button>Mantenimientos</button>
-									<button>Eventos</button>
-									<button>Calibraciones</button>
+									<button onClick={() => handleConsultaClick("invima")}>Revisar registro invima</button>
+									<button onClick={() => handleConsultaClick("mantenimientos")}>Mantenimientos</button>
+									<button onClick={() => handleConsultaClick("eventos")}>Eventos</button>
+									<button onClick={() => handleConsultaClick("calibraciones")}>Calibraciones</button>
 								</div>
 								{/* Agrega más campos de información según tus necesidades */}
 							</div>
@@ -152,6 +261,21 @@ function Areas() {
 					</div>
 				</div>
 			)}
+
+			{/* Aca iran los modales para los 4 tipos de consultas*/}
+			{showTablaRegistrosInvima && (
+        <div className="modalFormularioRegistrosInvima">
+          <div className="modal-content">
+            <div className="modal-content-consultas">
+              <h2>Registros Invima</h2>
+              {renderFormularioRegistrosInvima(registrosInvima ? registrosInvima[0] : null)}
+            </div>
+            <div className='modal-content-consulta-button-close'>
+              <button onClick={() => setShowTablaRegistrosInvima(false)}>Cerrar Formulario</button>
+            </div>
+          </div>
+        </div>
+      )}
 
 		</div>
 	);
