@@ -69,3 +69,76 @@
 }
 
 
+/* Estilos para el modal de consultas del equipo*/
+.modalConsultasEquipo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+    max-width: 700px;
+    z-index: 9999;
+    padding: 20px 40px;
+    border-radius: 10px;
+    /* Establece una altura máxima y activa el desplazamiento vertical */
+    max-height: 400px; /* Ajusta esto según tus necesidades */
+    overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido excede la altura máxima */
+}
+			
+.modal-content{
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content-consulta-tittle{
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-content-consulta-tittle > p{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.modal-content-consulta-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Para que los botones se envuelvan a la siguiente fila si no hay suficiente espacio */
+    margin: 0px 80px;
+}
+  
+
+.modal-content-consulta-buttons > button{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 200px;
+    border-radius: 10px;
+    padding: 4px 0px;
+    font-weight: 600;
+}
+
+.modal-content-consulta-button-close{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-content-consulta-button-close > button{
+    margin-top: 20px;
+    width: 165px;
+    border-radius: 10px;
+    padding: 10px 0px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.modal-content-consulta-button-close > button:hover{
+    color: white;
+    background-color: #4361ee;
+}
+

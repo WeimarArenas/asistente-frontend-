@@ -8,6 +8,11 @@ function Areas() {
 	const [areas, setAreas] = useState([]);
 	const [showModal, setShowModal] = useState(false);
 
+	// modal de informacion de cada equipo consultado
+	const [showModalEquipo, setShowModalEquipo] = useState(false);
+	const [selectedEquipoInfo, setSelectedEquipoInfo] = useState(null);
+
+
 	// componentes para los equipos por areas
 	const [selectedEquipo, setSelectedEquipo] = useState(null);
 
@@ -22,6 +27,17 @@ function Areas() {
 	// espacio de busqueda que estará leyendo cada letra ingresada y filtrando los datos
 	const handleSearchChange = (e) => {
 		setQuery(e.target.value);
+	};
+
+	// controlar la partura del modal que muestra la informacion del equipo consultado del area
+	const openModal = (equipoInfo) => {
+		setShowModalEquipo(true);
+		setSelectedEquipoInfo(equipoInfo);
+	};
+
+	const closeModal = () => {
+		setShowModalEquipo(false);
+		setSelectedEquipoInfo(null);
 	};
 
 
@@ -73,7 +89,7 @@ function Areas() {
 					placeholder="Buscar por nombre"
 					value={query}
 					onChange={handleSearchChange}
-					/>
+				/>
 			</div>
 
 			{selectedEquipo && selectedEquipo.length > 0 && (
@@ -94,7 +110,7 @@ function Areas() {
 						</thead>
 						<tbody>
 							{filteredEquipos.map(equipo => (
-								<tr key={equipo.id}>
+								<tr key={equipo.id} onClick={() => openModal(equipo)}>
 									<td>{equipo.nombre}</td>
 									<td>{equipo.marca}</td>
 									<td>{equipo.modelo}</td>
@@ -109,6 +125,31 @@ function Areas() {
 
 						</tbody>
 					</table>
+				</div>
+			)}
+
+		{/* Aca va el modal que mostrará la informacion que puede consultar de cada equipo */}
+			{showModalEquipo && (
+				<div className="modalConsultasEquipo">
+					<div className="modal-content">
+						{selectedEquipoInfo && (
+							<div className='modal-content-consultas'>
+								<div className='modal-content-consulta-tittle'>
+									<p>Nombre Equipo: {selectedEquipoInfo.nombre}</p>
+								</div>
+								<div className='modal-content-consulta-buttons'>
+									<button>Revisar registro invima</button>
+									<button>Mantenimientos</button>
+									<button>Eventos</button>
+									<button>Calibraciones</button>
+								</div>
+								{/* Agrega más campos de información según tus necesidades */}
+							</div>
+						)}
+						<div className='modal-content-consulta-button-close'>
+							<button onClick={closeModal}>Cerrar Modal</button>
+						</div>
+					</div>
 				</div>
 			)}
 
