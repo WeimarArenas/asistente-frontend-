@@ -136,7 +136,6 @@ function Areas() {
     setSelectedEquipoInfo(null);
   };
 
-
   const handleConsultarAreas = () => {
     fetch('http://127.0.0.1:5000/areas')
       .then(response => response.json())
@@ -200,14 +199,13 @@ function Areas() {
   };
 
 
-  // Añade un nuevo estado para manejar la selección de la casilla de verificación
-  const [confirmacionVigencia, setConfirmacionVigencia] = useState(true);
+  const [confirmacionVigencia, setConfirmacionVigencia] = useState(null);
 
   const handleChange = (e) => {
-    setConfirmacionVigencia(!confirmacionVigencia);
+    setConfirmacionVigencia(prevValue => !prevValue); // Cambia el valor de true a false y viceversa
 
     // Agregar la llamada a handleConsultaClick si confirmacionVigencia es false
-    if (!confirmacionVigencia) {
+    if (confirmacionVigencia) {
       handleConsultaClick("invima");
     }
   };
@@ -322,8 +320,8 @@ function Areas() {
                   <input
                     type="radio"
                     value="si"
-                    checked={confirmacionVigencia}
-                    onChange={() => setConfirmacionVigencia(true)}
+                    checked={confirmacionVigencia === true}
+                    onChange={handleChange}
                   />
                   Sí
                 </label>
@@ -331,19 +329,19 @@ function Areas() {
                   <input
                     type="radio"
                     value="no"
-                    checked={!confirmacionVigencia}
-                    onChange={handleChange} // Aquí se llama a handleChange en el evento onChange
+                    checked={confirmacionVigencia === false}
+                    onChange={handleChange}
                   />
                   No
                 </label>
-                {!confirmacionVigencia && renderFormularioRegistrosInvima()}
+                {confirmacionVigencia === true  && renderFormularioRegistrosInvima()}
               </div>
-              {confirmacionVigencia && <p>Todo está actualizado</p>}
+              {!confirmacionVigencia && <p>Todo está actualizado</p>}
             </div>
             <div className='modal-content-consulta-button-close'>
               <button onClick={() => {
                 setShowTablaRegistrosInvima(false);
-                setConfirmacionVigencia(true);
+                setConfirmacionVigencia(null);
               }}>Cerrar Formulario</button>
             </div>
           </div>
