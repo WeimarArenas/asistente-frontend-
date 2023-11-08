@@ -29,9 +29,15 @@ function Areas() {
   // Si el tipo de consulta es para registro invima
   const [registrosInvima, setRegistrosInvima] = useState(null);
   const [showTablaRegistrosInvima, setShowTablaRegistrosInvima] = useState(false);
-  const [mostrarFormularioRegistrosInvima, setMostrarFormularioRegistrosInvima] = useState(true)
+  const [mostrarFormularioRegistrosInvima, setMostrarFormularioRegistrosInvima] = useState(true);
 
-  // logica para el form del invima
+
+  // Si el tipo de consulta es para eventos
+  const [eventosEquipo, setEventosEquipos] = useState(null)
+  const [showModalEventosEquipo, setShowModalEventosEquipo] = useState(false);
+
+
+  // Edicion del form de registro invima
   const [editableFields, setEditableFields] = useState({
     numero_registro: "",
     vigencia: "",
@@ -41,14 +47,25 @@ function Areas() {
     evidencia_fotografica: "No se dispone evidencias fotograficas"
   });
 
+  // edicion del form de eventos de equipo
+  const [editableFieldsEventos, setEditableFieldsEventos] = useState({
+    fecha: Date.now
+  })
+
   const handleChangeEditable = (e) => {
     const { name, value } = e.target;
     setEditableFields({ ...editableFields, [name]: value });
   };
 
+  const handleChangeEditableEventos = (e) => {
+    const { name, value } = e.target;
+    setEditableFieldsEventos({ ...editableFieldsEventos, [name]: value });
+  };
+
   const handleSaveChanges = () => {
   };
 
+ // render formulario de registro invima
   const renderFormularioRegistrosInvima = () => {
     const registro = registrosInvima ? registrosInvima[0] : null; // Verificar si registrosInvima está definido
 
@@ -109,6 +126,32 @@ function Areas() {
                 onChange={handleChangeEditable}
                 rows="4"
                 cols="50"
+              />
+            </div>
+          </div>
+        ) : null}
+        <div className="button-container">
+          <button type="button" onClick={handleSaveChanges}>Guardar</button>
+        </div>
+      </form>
+    );
+  };
+
+  // render form de eventos de los equipos
+  const renderFormEventosEquipos = () => {
+    const registro = eventosEquipo ? eventosEquipo[0] : null; // Verificar si registrosInvima está definido
+
+    return (
+      <form className="form-container">
+        {registro ? (
+          <div>
+            <div className="form-group">
+              <label>Fecha:</label>
+              <input
+                type="text"
+                name="fecha"
+                value={editableFieldsEventos.fecha || registro.fecha}
+                onChange={handleChangeEditableEventos}
               />
             </div>
           </div>
@@ -189,6 +232,10 @@ function Areas() {
           case "invima":
             setRegistrosInvima(data.registros_invima);
             setShowTablaRegistrosInvima(true);
+            break;
+          case "eventos":
+            setEventosEquipos(data.eventos);
+            setShowModalEventosEquipo(true)
             break;
           // ... (otros casos)
           default:
@@ -292,8 +339,13 @@ function Areas() {
                     handleConsultaClick("invima");
                   }}>Registrar registro Invima</button>
 
-                  <button onClick={() => handleConsultaClick("mantenimientos")}>Mantenimientos</button>
-                  <button onClick={() => handleConsultaClick("eventos")}>Eventos</button>
+                  <button onClick={() => {
+                    handleConsultaClick("mantenimientos");
+                    }}>Mantenimientos</button>
+                  <button onClick={() => {
+                    setShowModalEventosEquipo(true);
+                    handleConsultaClick("eventos")
+                    }}>Eventos</button>
                   <button onClick={() => handleConsultaClick("calibraciones")}>Calibraciones</button>
                 </div>
                 {/* Agrega más campos de información según tus necesidades */}
@@ -307,6 +359,8 @@ function Areas() {
       )}
 
       {/* Aca iran los modales para los 4 tipos de consultas*/}
+
+      {/* Para mostrar el modal de la consulta de registro invima */}
       {showTablaRegistrosInvima && (
         <div className="modalFormularioRegistrosInvima">
           <div className="modal-content">
@@ -336,7 +390,7 @@ function Areas() {
                 </label>
                 {confirmacionVigencia === true  && renderFormularioRegistrosInvima()}
               </div>
-              {!confirmacionVigencia && <p>Todo está actualizado</p>}
+              {confirmacionVigencia === false && <p>Todo está actualizado</p>}
             </div>
             <div className='modal-content-consulta-button-close'>
               <button onClick={() => {
@@ -347,6 +401,18 @@ function Areas() {
           </div>
         </div>
       )}
+
+      {/* Para mostrar el modal de la consulta de eventos */}
+      {showModalEventosEquipo && (
+        <div className='modal'> 
+          <div>
+          {renderFormEventosEquipos()}
+          </div>
+          <button onClick={()=> setShowModalEventosEquipo(false)}>cerrar eventos</button>
+
+        </div>
+      )} 
+
     </div>
   );
 }
