@@ -223,3 +223,19 @@
   }
   
 
+  .modalEventos {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+    max-width: 800px;
+    z-index: 9990;
+    padding: 10px 40px;
+    border-radius: 10px;
+    /* Establece una altura máxima y activa el desplazamiento vertical */
+    max-height: 700px; /* Ajusta esto según tus necesidades */
+    overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido excede la altura máxima */
+}

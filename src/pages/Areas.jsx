@@ -65,9 +65,17 @@ function Areas() {
   const handleSaveChanges = () => {
   };
 
- // render formulario de registro invima
+  // render formulario de registro invima
   const renderFormularioRegistrosInvima = () => {
     const registro = registrosInvima ? registrosInvima[0] : null; // Verificar si registrosInvima está definido
+
+    if (registro == null) {
+      return (
+        <div>
+          <p>El equipo no cuenta con eventos</p>
+        </div>
+      )
+    }
 
     return (
       <form className="form-container">
@@ -137,31 +145,157 @@ function Areas() {
     );
   };
 
+  // para obtener la fecha actual
+  const obtenerFechaActual = () => {
+    const fechaActual = new Date();
+    const year = fechaActual.getFullYear();
+    const month = (fechaActual.getMonth() + 1).toString().padStart(2, '0'); // Añade un cero inicial si es necesario
+    const day = fechaActual.getDate().toString().padStart(2, '0'); // Añade un cero inicial si es necesario
+    const fechaFormateada = `${year}-${month}-${day}`;
+
+    return fechaFormateada;
+  };
+
   // render form de eventos de los equipos
   const renderFormEventosEquipos = () => {
-    const registro = eventosEquipo ? eventosEquipo[0] : null; // Verificar si registrosInvima está definido
+    const registro = eventosEquipo ? eventosEquipo[0] : null;
+
+    const mostrarTitulo = registro == null;
 
     return (
-      <form className="form-container">
-        {registro ? (
-          <div>
-            <div className="form-group">
-              <label>Fecha:</label>
-              <input
-                type="text"
-                name="fecha"
-                value={editableFieldsEventos.fecha || registro.fecha}
-                onChange={handleChangeEditableEventos}
-              />
-            </div>
+      <div>
+        {mostrarTitulo && (
+          <div className="form-title">
+            <h3>El equipo no cuenta con eventos</h3>
+            <p>Puede generar un nuevo evento a continuación:</p>
           </div>
-        ) : null}
-        <div className="button-container">
-          <button type="button" onClick={handleSaveChanges}>Guardar</button>
-        </div>
-      </form>
+        )}
+        <form className="form-container">
+          {registro ? (
+            <div>
+              <div className="form-group">
+                <label>Estado del Evento:</label>
+                <input
+                  type="text"
+                  name="estado_evento"
+                  value={editableFieldsEventos.estado_evento || registro.estado_evento}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+              <div className="form-group">
+                <label>Evidencia Documento:</label>
+                <input
+                  type="text"
+                  name="evidencia_documento"
+                  value={editableFieldsEventos.evidencia_documento || registro.evidencia_documento}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+              <div className="form-group">
+                <label>Evidencia Fotográfica:</label>
+                <input
+                  type="text"
+                  name="evidencia_fotografica"
+                  value={editableFieldsEventos.evidencia_fotografica || registro.evidencia_fotografica}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+              <div className="form-group">
+                <label>Evidencia Textual:</label>
+                <input
+                  type="text"
+                  name="evidencia_textual"
+                  value={editableFieldsEventos.evidencia_textual || registro.evidencia_textual}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+              <div className="form-group">
+                <label>Fecha:</label>
+                <input
+                  type="text"
+                  name="fecha"
+                  value={editableFieldsEventos.fecha || registro.fecha}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+              <div className="form-group">
+                <label>Tipo de Evento:</label>
+                <input
+                  type="text"
+                  name="tipo_evento"
+                  value={editableFieldsEventos.tipo_evento || registro.tipo_evento}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="form-group">
+                <label>Estado del Evento:</label>
+                <input
+                  type="text"
+                  name="estado_evento"
+                  value={editableFieldsEventos.estado_evento}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+              <div className="form-group">
+                <label>Evidencia Documento:</label>
+                <input
+                  type="text"
+                  name="evidencia_documento"
+                  value={editableFieldsEventos.evidencia_documento}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+              <div className="form-group">
+                <label>Evidencia Fotográfica:</label>
+                <input
+                  type="text"
+                  name="evidencia_fotografica"
+                  value={editableFieldsEventos.evidencia_fotografica}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+              <div className="form-group">
+                <label>Evidencia Textual:</label>
+                <input
+                  type="text"
+                  name="evidencia_textual"
+                  value={editableFieldsEventos.evidencia_textual}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+              <div className="form-group">
+                <label>Fecha:</label>
+                <input
+                  type="text"
+                  name="fecha"
+                  value={obtenerFechaActual()}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+              <div className="form-group">
+                <label>Tipo de Evento:</label>
+                <input
+                  type="text"
+                  name="tipo_evento"
+                  value={editableFieldsEventos.tipo_evento}
+                  onChange={handleChangeEditableEventos}
+                />
+              </div>
+            </div>
+          )}
+          <div className="button-container">
+            <button type="button" onClick={handleSaveChanges}>Guardar</button>
+          </div>
+        </form>
+      </div>
     );
   };
+
+
+
 
   // espacio de busqueda que estará leyendo cada letra ingresada y filtrando los datos
   const handleSearchChange = (e) => {
@@ -341,11 +475,11 @@ function Areas() {
 
                   <button onClick={() => {
                     handleConsultaClick("mantenimientos");
-                    }}>Mantenimientos</button>
+                  }}>Mantenimientos</button>
                   <button onClick={() => {
                     setShowModalEventosEquipo(true);
                     handleConsultaClick("eventos")
-                    }}>Eventos</button>
+                  }}>Eventos</button>
                   <button onClick={() => handleConsultaClick("calibraciones")}>Calibraciones</button>
                 </div>
                 {/* Agrega más campos de información según tus necesidades */}
@@ -388,7 +522,7 @@ function Areas() {
                   />
                   No
                 </label>
-                {confirmacionVigencia === true  && renderFormularioRegistrosInvima()}
+                {confirmacionVigencia === true && renderFormularioRegistrosInvima()}
               </div>
               {confirmacionVigencia === false && <p>Todo está actualizado</p>}
             </div>
@@ -404,14 +538,14 @@ function Areas() {
 
       {/* Para mostrar el modal de la consulta de eventos */}
       {showModalEventosEquipo && (
-        <div className='modal'> 
+        <div className='modalEventos'>
           <div>
-          {renderFormEventosEquipos()}
+            {renderFormEventosEquipos()}
           </div>
-          <button onClick={()=> setShowModalEventosEquipo(false)}>cerrar eventos</button>
+          <button onClick={() => setShowModalEventosEquipo(false)}>cerrar eventos</button>
 
         </div>
-      )} 
+      )}
 
     </div>
   );
