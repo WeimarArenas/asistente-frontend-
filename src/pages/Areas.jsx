@@ -337,7 +337,7 @@ function Areas() {
                   <button onClick={() => {
                     setShowTablaRegistrosInvima(true);
                     handleConsultaClick("invima");
-                  }}>Registrar registro Invima</button>
+                  }}>Registro Invima</button>
 
                   <button onClick={() => {
                     handleConsultaClick("mantenimientos");
@@ -352,7 +352,7 @@ function Areas() {
               </div>
             )}
             <div className='modal-content-consulta-button-close'>
-              <button onClick={closeModal}>Cerrar Modal</button>
+              <button onClick={closeModal}>Cerrar</button>
             </div>
           </div>
         </div>
