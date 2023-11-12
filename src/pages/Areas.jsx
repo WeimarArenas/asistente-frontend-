@@ -30,6 +30,9 @@ function Areas() {
   const [eventosEquipo, setEventosEquipos] = useState(null)
   const [showModalEventosEquipo, setShowModalEventosEquipo] = useState(false);
 
+  // opciones
+  const [confirmacionVigencia, setConfirmacionVigencia] = useState(null);
+  const [generarEventoEquipo, setGenerarEventoEquipo] = useState(null);
 
   // Edicion del form de registro invima
   const [editableFields, setEditableFields] = useState({
@@ -83,6 +86,8 @@ function Areas() {
 
   // render form de eventos de los equipos
   const renderModalEventosEquipo = () => {
+
+
     return (
       <ModalEventosEquipo
         eventosEquipo={eventosEquipo}
@@ -176,9 +181,6 @@ function Areas() {
       .catch(error => console.error('Error:', error));
   };
 
-
-  const [confirmacionVigencia, setConfirmacionVigencia] = useState(null);
-
   const handleChange = (e) => {
     setConfirmacionVigencia(prevValue => !prevValue); // Cambia el valor de true a false y viceversa
 
@@ -197,9 +199,10 @@ function Areas() {
 
       {showModal && <ModalAreas areas={areas} handleAreaClick={handleAreaClick} setShowModal={setShowModal} />}
 
-      {equipoByArea && equipoByArea.length > 0 && ( <TablaEquiposAreas filteredEquipos={equipoByArea} onEquipoClick={handleEquipoClick}/>)}
+      {/* Tabla que muestra los datos de los equipos por areas */}
+      {equipoByArea && equipoByArea.length > 0 && (<TablaEquiposAreas filteredEquipos={equipoByArea} onEquipoClick={handleEquipoClick} />)}
 
-      {/* Aca va el modal que mostrará la informacion que puede consultar de cada equipo */}
+      {/* Aca va el modal que mostrará la informacion que puede consultar del equipo seleccionado */}
       {showModalEquipo && (
         <div className="modalConsultasEquipo">
           <div className="modal-content">
@@ -223,7 +226,6 @@ function Areas() {
                   }}>Eventos</button>
                   <button onClick={() => handleConsultaClick("calibraciones")}>Calibraciones</button>
                 </div>
-                {/* Agrega más campos de información según tus necesidades */}
               </div>
             )}
             <div className='modal-content-consulta-button-close'>
@@ -232,8 +234,6 @@ function Areas() {
           </div>
         </div>
       )}
-
-      {/* Aca iran los modales para los 4 tipos de consultas*/}
 
       {/* Para mostrar el modal de la consulta de registro invima */}
       {showTablaRegistrosInvima && (
@@ -278,7 +278,31 @@ function Areas() {
       )}
 
       {/* Para mostrar el modal de la consulta de eventos */}
-      {showModalEventosEquipo && renderModalEventosEquipo()}
+      {showModalEventosEquipo && (
+        <div className="modalFormularioRegistrosInvima">
+          <div>
+            <label>
+              <input
+                type="radio"
+                checked={generarEventoEquipo === false}
+                onChange={handleChange}
+              />
+              Conocer Eventos
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="no"
+                checked={generarEventoEquipo === false}
+                onChange={handleChange}
+              />
+              Generar evento
+            </label>
+            {generarEventoEquipo === false && renderModalEventosEquipo()}
+          </div>
+          {generarEventoEquipo === true && <p>Todo está actualizado</p>}
+        </div>
+      )}
     </div>
   );
 }
