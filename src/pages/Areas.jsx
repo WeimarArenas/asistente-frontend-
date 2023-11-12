@@ -294,9 +294,6 @@ function Areas() {
     );
   };
 
-
-
-
   // espacio de busqueda que estará leyendo cada letra ingresada y filtrando los datos
   const handleSearchChange = (e) => {
     setQuery(e.target.value);
@@ -542,11 +539,12 @@ function Areas() {
           <div>
             {renderFormEventosEquipos()}
           </div>
-          <button onClick={() => setShowModalEventosEquipo(false)}>cerrar eventos</button>
+          <div className='modalEventosCerrarEventosContainer'>
+            <button onClick={() => setShowModalEventosEquipo(false)}>cerrar eventos</button>
+          </div>
 
         </div>
       )}
-
     </div>
   );
 }
