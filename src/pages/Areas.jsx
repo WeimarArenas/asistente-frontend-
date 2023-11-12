@@ -14,26 +14,14 @@ function Areas() {
 
   // modal de informacion de cada equipo consultado
   const [showModalEquipo, setShowModalEquipo] = useState(false);
-  const [selectedEquipoInfo, setSelectedEquipoInfo] = useState(null);
+  const [selectedEquipoId, setSelectedEquipoId] = useState(null);
 
-  // componentes para los equipos por areas
-  const [selectedEquipo, setSelectedEquipo] = useState(null);
-
-  // esta se usará para ir consultando los datos de la tabla que trae los equipos que pertenececen a un area
-  const [query, setQuery] = useState('');
-
-  //Para que la busqueda pueda darse sin necesidad de tomar en cuenta mayusculas y minusculas
-  const filteredEquipos = selectedEquipo && selectedEquipo.length > 0 ? selectedEquipo.filter(equipo => {
-    return equipo.nombre.toLowerCase().includes(query.toLowerCase());
-  }) : [];
-
-  // almacenar el estado de la consulta actual de las 4 posibles consultas que se le hacen al equipo
-  const [selectedConsulta, setSelectedConsulta] = useState(null);
+  // Guardo los equipos consultados por areas
+  const [equipoByArea, setEquipoByArea] = useState(null)
 
   // Si el tipo de consulta es para registro invima
   const [registrosInvima, setRegistrosInvima] = useState(null);
   const [showTablaRegistrosInvima, setShowTablaRegistrosInvima] = useState(false);
-  const [mostrarFormularioRegistrosInvima, setMostrarFormularioRegistrosInvima] = useState(true);
 
 
   // Si el tipo de consulta es para eventos
@@ -298,20 +286,21 @@ function Areas() {
     );
   };
 
-  // espacio de busqueda que estará leyendo cada letra ingresada y filtrando los datos
-  const handleSearchChange = (e) => {
-    setQuery(e.target.value);
-  };
-
   // controlar la partura del modal que muestra la informacion del equipo consultado del area
-  const openModal = (equipoInfo) => {
+  const openModal = (equipoId) => {
     setShowModalEquipo(true);
-    setSelectedEquipoInfo(equipoInfo);
+    console.log(equipoId)
+    setSelectedEquipoId(equipoId);
   };
 
   const closeModal = () => {
     setShowModalEquipo(false);
-    setSelectedEquipoInfo(null);
+    setSelectedEquipoId(null);
+  };
+
+  const handleEquipoClick = (equipoId) => {
+    openModal(equipoId);
+    // Puedes realizar otras acciones según sea necesario
   };
 
   const handleConsultarAreas = () => {
@@ -327,7 +316,7 @@ function Areas() {
     fetch(`http://127.0.0.1:5000/areas/equipos/${id}`)
       .then(response => response.json())
       .then(data => {
-        setSelectedEquipo(data.equipos);
+        setEquipoByArea(data.equipos);
         console.log(data)
       })
       .catch(error => console.error('Error:', error));
@@ -337,10 +326,9 @@ function Areas() {
 
   // hangler de los 4 tipos de consultas posibles
   const handleConsultaClick = (tipoConsulta) => {
-    setSelectedConsulta(tipoConsulta);
 
     // Hacer la solicitud HTTP según el tipo de consulta
-    const idEquipo = selectedEquipoInfo.id; // Obtener el ID del equipo
+    const idEquipo = selectedEquipoId.id; // Obtener el ID del equipo
     let endpoint;
 
     switch (tipoConsulta) {
@@ -401,25 +389,21 @@ function Areas() {
 
       {showModal && <ModalAreas areas={areas} handleAreaClick={handleAreaClick} setShowModal={setShowModal} />}
 
-      <div className='containerBarraBusqueda'>
-        <input
-          type="text"
-          placeholder="Buscar por nombre"
-          value={query}
-          onChange={handleSearchChange}
+      {equipoByArea && equipoByArea.length > 0 && (
+        <TablaEquiposAreas
+          filteredEquipos={equipoByArea}
+          onEquipoClick={handleEquipoClick}
         />
-      </div>
-
-      {selectedEquipo && selectedEquipo.length > 0 && <TablaEquiposAreas filteredEquipos={filteredEquipos} />}
+      )}
 
       {/* Aca va el modal que mostrará la informacion que puede consultar de cada equipo */}
       {showModalEquipo && (
         <div className="modalConsultasEquipo">
           <div className="modal-content">
-            {selectedEquipoInfo && (
+            {selectedEquipoId && (
               <div className='modal-content-consultas'>
                 <div className='modal-content-consulta-tittle'>
-                  <p>Nombre Equipo: {selectedEquipoInfo.nombre}</p>
+                  <p>Nombre Equipo: {selectedEquipoId.nombre}</p>
                 </div>
                 <div className='modal-content-consulta-buttons'>
                   <button onClick={() => {
