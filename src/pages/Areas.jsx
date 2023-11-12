@@ -7,6 +7,8 @@ import TablaEquiposAreas from '../components/TablaEquiposAreas';
 
 // import de los estilos
 import '../styles/areas.css'
+import FormularioRegistroInvima from '../components/FormularioRegistroInvima';
+import ModalEventosEquipo from '../components/ModalEventosEquipo';
 
 function Areas() {
   const [areas, setAreas] = useState([]);
@@ -70,219 +72,25 @@ function Areas() {
     }
 
     return (
-      <form className="form-container">
-        {registro ? (
-          <div>
-            <div className="form-group">
-              <label>Número de Registro:</label>
-              <input
-                type="text"
-                name="numero_registro"
-                value={editableFields.numero_registro || registro.numero_registro}
-                onChange={handleChangeEditable}
-              />
-            </div>
-            <div className="form-group">
-              <label>Vigencia:</label>
-              <input
-                type="text"
-                name="vigencia"
-                value={editableFields.vigencia || registro.vigencia}
-                onChange={handleChangeEditable}
-              />
-            </div>
-            <div className="form-group">
-              <label>Fecha:</label>
-              <input
-                type="text"
-                name="fecha"
-                value={editableFields.fecha || registro.fecha}
-                onChange={handleChangeEditable}
-              />
-            </div>
-            <div className="form-group">
-              <label>Documentos de evidencia:</label>
-              <input
-                type="text"
-                name="Documentos de evidencia"
-                value={editableFields.evidencia_documento || registro.evidencia_documento}
-                onChange={handleChangeEditable}
-              />
-            </div>
-            <div className="form-group">
-              <label>Evidencia fotografica:</label>
-              <input
-                type="text"
-                name="Evidencia fotografica"
-                value={editableFields.evidencia_fotografica || registro.evidencia_fotografica}
-                onChange={handleChangeEditable}
-              />
-            </div>
-            <div className="form-group">
-              <label>Evidencia Textual:</label>
-              <textarea
-                name="evidencia_textual"
-                value={editableFields.evidencia_textual || registro.evidencia_textual}
-                onChange={handleChangeEditable}
-                rows="4"
-                cols="50"
-              />
-            </div>
-          </div>
-        ) : null}
-        <div className="button-container">
-          <button type="button" onClick={handleSaveChanges}>Guardar</button>
-        </div>
-      </form>
+      <FormularioRegistroInvima
+        registrosInvima={registrosInvima}
+        editableFields={editableFields}
+        handleChangeEditable={handleChangeEditable}
+        handleSaveChanges={handleSaveChanges}
+      />
     );
   };
 
-  // para obtener la fecha actual
-  const obtenerFechaActual = () => {
-    const fechaActual = new Date();
-    const year = fechaActual.getFullYear();
-    const month = (fechaActual.getMonth() + 1).toString().padStart(2, '0'); // Añade un cero inicial si es necesario
-    const day = fechaActual.getDate().toString().padStart(2, '0'); // Añade un cero inicial si es necesario
-    const fechaFormateada = `${year}-${month}-${day}`;
-
-    return fechaFormateada;
-  };
-
   // render form de eventos de los equipos
-  const renderFormEventosEquipos = () => {
-    const registro = eventosEquipo ? eventosEquipo[0] : null;
-
-    const mostrarTitulo = registro == null;
-
+  const renderModalEventosEquipo = () => {
     return (
-      <div>
-        {mostrarTitulo && (
-          <div className="form-title">
-            <h3>El equipo no cuenta con eventos</h3>
-            <p>Puede generar un nuevo evento a continuación:</p>
-          </div>
-        )}
-        <form className="form-container">
-          {registro ? (
-            <div>
-              <div className="form-group">
-                <label>Estado del Evento:</label>
-                <input
-                  type="text"
-                  name="estado_evento"
-                  value={editableFieldsEventos.estado_evento || registro.estado_evento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Documento:</label>
-                <input
-                  type="text"
-                  name="evidencia_documento"
-                  value={editableFieldsEventos.evidencia_documento || registro.evidencia_documento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Fotográfica:</label>
-                <input
-                  type="text"
-                  name="evidencia_fotografica"
-                  value={editableFieldsEventos.evidencia_fotografica || registro.evidencia_fotografica}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Textual:</label>
-                <input
-                  type="text"
-                  name="evidencia_textual"
-                  value={editableFieldsEventos.evidencia_textual || registro.evidencia_textual}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Fecha:</label>
-                <input
-                  type="text"
-                  name="fecha"
-                  value={editableFieldsEventos.fecha || registro.fecha}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Tipo de Evento:</label>
-                <input
-                  type="text"
-                  name="tipo_evento"
-                  value={editableFieldsEventos.tipo_evento || registro.tipo_evento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div className="form-group">
-                <label>Estado del Evento:</label>
-                <input
-                  type="text"
-                  name="estado_evento"
-                  value={editableFieldsEventos.estado_evento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Documento:</label>
-                <input
-                  type="text"
-                  name="evidencia_documento"
-                  value={editableFieldsEventos.evidencia_documento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Fotográfica:</label>
-                <input
-                  type="text"
-                  name="evidencia_fotografica"
-                  value={editableFieldsEventos.evidencia_fotografica}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Textual:</label>
-                <input
-                  type="text"
-                  name="evidencia_textual"
-                  value={editableFieldsEventos.evidencia_textual}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Fecha:</label>
-                <input
-                  type="text"
-                  name="fecha"
-                  value={obtenerFechaActual()}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Tipo de Evento:</label>
-                <input
-                  type="text"
-                  name="tipo_evento"
-                  value={editableFieldsEventos.tipo_evento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-            </div>
-          )}
-          <div className="button-container">
-            <button type="button" onClick={handleSaveChanges}>Guardar</button>
-          </div>
-        </form>
-      </div>
+      <ModalEventosEquipo
+        eventosEquipo={eventosEquipo}
+        editableFieldsEventos={editableFieldsEventos}
+        handleChangeEditableEventos={handleChangeEditableEventos}
+        handleSaveChanges={handleSaveChanges}
+        handleCloseModal={() => setShowModalEventosEquipo(false)}
+      />
     );
   };
 
@@ -389,12 +197,7 @@ function Areas() {
 
       {showModal && <ModalAreas areas={areas} handleAreaClick={handleAreaClick} setShowModal={setShowModal} />}
 
-      {equipoByArea && equipoByArea.length > 0 && (
-        <TablaEquiposAreas
-          filteredEquipos={equipoByArea}
-          onEquipoClick={handleEquipoClick}
-        />
-      )}
+      {equipoByArea && equipoByArea.length > 0 && ( <TablaEquiposAreas filteredEquipos={equipoByArea} onEquipoClick={handleEquipoClick}/>)}
 
       {/* Aca va el modal que mostrará la informacion que puede consultar de cada equipo */}
       {showModalEquipo && (
@@ -475,16 +278,7 @@ function Areas() {
       )}
 
       {/* Para mostrar el modal de la consulta de eventos */}
-      {showModalEventosEquipo && (
-        <div className='modalEventos'>
-          <div>
-            {renderFormEventosEquipos()}
-          </div>
-          <button onClick={() => setShowModalEventosEquipo(false)}>cerrar eventos</button>
-
-        </div>
-      )}
-
+      {showModalEventosEquipo && renderModalEventosEquipo()}
     </div>
   );
 }
