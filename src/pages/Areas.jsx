@@ -1,39 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // importo los componentes
 import Header from '../components/Header';
 import ModalAreas from '../components/ModalAreas';
 import TablaEquiposAreas from '../components/TablaEquiposAreas';
+import FormularioRegistroInvima from '../components/FormularioRegistroInvima';
+import ModalEventosEquipo from '../components/ModalEventosEquipo';
 
 // import de los estilos
 import '../styles/areas.css'
-import FormularioRegistroInvima from '../components/FormularioRegistroInvima';
-import ModalEventosEquipo from '../components/ModalEventosEquipo';
 
 function Areas() {
   const [areas, setAreas] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
-  // modal de informacion de cada equipo consultado
   const [showModalEquipo, setShowModalEquipo] = useState(false);
   const [selectedEquipoId, setSelectedEquipoId] = useState(null);
+  const [equipoByArea, setEquipoByArea] = useState(null);
 
-  // Guardo los equipos consultados por areas
-  const [equipoByArea, setEquipoByArea] = useState(null)
-
-  // Si el tipo de consulta es para registro invima
-  const [registrosInvima, setRegistrosInvima] = useState(null);
-  const [showTablaRegistrosInvima, setShowTablaRegistrosInvima] = useState(false);
-  
-  
-  // Si el tipo de consulta es para eventos
-  const [eventosEquipo, setEventosEquipos] = useState(null)
-  const [showModalEventosEquipo, setShowModalEventosEquipo] = useState(false);
-
-  // opciones
+  const [tipoConsulta, setTipoConsulta] = useState(null);
   const [confirmacionVigencia, setConfirmacionVigencia] = useState(null);
   const [generarEventoEquipo, setGenerarEventoEquipo] = useState(null);
 
+  const [registrosInvima, setRegistrosInvima] = useState(null);
+  const [showTablaRegistrosInvima, setShowTablaRegistrosInvima] = useState(false);
+  const [eventosEquipo, setEventosEquipos] = useState(null);
+  const [showModalEventosEquipo, setShowModalEventosEquipo] = useState(false);
   // Edicion del form de registro invima
   const [editableFields, setEditableFields] = useState({
     numero_registro: "",
@@ -45,18 +36,21 @@ function Areas() {
   });
 
   // edicion del form de eventos de equipo
-  const [editableFieldsEventos, setEditableFieldsEventos] = useState({
-    fecha: Date.now
-  })
-
-  const handleChangeEditable = (e) => {
+  const handleInputChange = (e, setState) => {
     const { name, value } = e.target;
-    setEditableFields({ ...editableFields, [name]: value });
+    setState(prevState => ({ ...prevState, [name]: value }));
   };
 
+  const handleChangeEditable = (e) => {
+    handleInputChange(e, setEditableFields);
+  };
+
+  const [editableFieldsEventos, setEditableFieldsEventos] = useState({
+    fecha: Date.now()
+  });
+  
   const handleChangeEditableEventos = (e) => {
-    const { name, value } = e.target;
-    setEditableFieldsEventos({ ...editableFieldsEventos, [name]: value });
+    handleInputChange(e, setEditableFieldsEventos);
   };
 
   const handleSaveChanges = () => {
@@ -182,9 +176,8 @@ function Areas() {
   };
 
   const handleChange = (e) => {
-    setConfirmacionVigencia(prevValue => !prevValue); // Cambia el valor de true a false y viceversa
+    setConfirmacionVigencia(prevValue => !prevValue);
 
-    // Agregar la llamada a handleConsultaClick si confirmacionVigencia es false
     if (confirmacionVigencia) {
       handleConsultaClick("invima");
     } else {
@@ -195,11 +188,16 @@ function Areas() {
   const handleChangeEvento = (e) => {
     setGenerarEventoEquipo(prevValue => !prevValue); // Cambia el valor de true a false y viceversa
 
-    // Agregar la llamada a handleConsultaClick si confirmacionVigencia es false
     if (generarEventoEquipo) {
       handleConsultaClick("eventos");
     }
   };
+
+  useEffect(() => {
+    if (selectedEquipoId) {
+      handleConsultaClick();
+    }
+  }, [tipoConsulta, selectedEquipoId]);
 
   return (
     <div>
@@ -209,9 +207,9 @@ function Areas() {
       </div>
 
       {showModal && <ModalAreas areas={areas} handleAreaClick={handleAreaClick} setShowModal={setShowModal} />}
-
-      {/* Tabla que muestra los datos de los equipos por areas */}
-      {equipoByArea && equipoByArea.length > 0 && (<TablaEquiposAreas filteredEquipos={equipoByArea} onEquipoClick={handleEquipoClick} />)}
+      {equipoByArea && equipoByArea.length > 0 && (
+        <TablaEquiposAreas filteredEquipos={equipoByArea} onEquipoClick={handleEquipoClick} />
+      )}
 
       {/* Aca va el modal que mostrará la informacion que puede consultar del equipo seleccionado */}
       {showModalEquipo && (
@@ -311,15 +309,18 @@ function Areas() {
             </label>
           </div>
           <div className='modalesEventos'>
-            {generarEventoEquipo === true && <p className='textUpdateEvento'>Todo está actualizado</p>}
-            {generarEventoEquipo === false && renderModalEventosEquipo()}
+            {generarEventoEquipo === true ? (
+              <p className='textUpdateEvento'>Todo está actualizado</p>
+            ) : (
+              renderModalEventosEquipo()
+            )}
           </div>
           <div className='cerrarConsultaEvento'>
-          <button onClick={() => {
-                setShowModalEventosEquipo(false);
-                setEventosEquipos(false);
-                setGenerarEventoEquipo(null)
-              }}>Cerrar Formulario</button>
+            <button onClick={() => {
+              setShowModalEventosEquipo(false);
+              setEventosEquipos(false);
+              setGenerarEventoEquipo(null)
+            }}>Cerrar Formulario</button>
           </div>
         </div>
       )}

@@ -38,7 +38,7 @@ function FormularioRegistroInvima ({ registrosInvima, editableFields, handleChan
               <label>Documentos de evidencia:</label>
               <input
                 type="text"
-                name="Documentos de evidencia"
+                name="evidencia_documento"
                 value={editableFields.evidencia_documento || registro.evidencia_documento}
                 onChange={handleChangeEditable}
               />
@@ -47,7 +47,7 @@ function FormularioRegistroInvima ({ registrosInvima, editableFields, handleChan
               <label>Evidencia fotográfica:</label>
               <input
                 type="text"
-                name="Evidencia fotográfica"
+                name="evidencia_fotografica"
                 value={editableFields.evidencia_fotografica || registro.evidencia_fotografica}
                 onChange={handleChangeEditable}
               />
