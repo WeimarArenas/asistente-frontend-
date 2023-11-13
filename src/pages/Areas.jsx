@@ -1,42 +1,30 @@
-import React, { useState } from 'react';
-// impor del componente
+import React, { useState, useEffect } from 'react';
+
+// importo los componentes
 import Header from '../components/Header';
+import ModalAreas from '../components/ModalAreas';
+import TablaEquiposAreas from '../components/TablaEquiposAreas';
+import FormularioRegistroInvima from '../components/FormularioRegistroInvima';
+import ModalEventosEquipo from '../components/ModalEventosEquipo';
+
 // import de los estilos
 import '../styles/areas.css'
 
 function Areas() {
   const [areas, setAreas] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
-  // modal de informacion de cada equipo consultado
   const [showModalEquipo, setShowModalEquipo] = useState(false);
-  const [selectedEquipoInfo, setSelectedEquipoInfo] = useState(null);
+  const [selectedEquipoId, setSelectedEquipoId] = useState(null);
+  const [equipoByArea, setEquipoByArea] = useState(null);
 
-  // componentes para los equipos por areas
-  const [selectedEquipo, setSelectedEquipo] = useState(null);
+  const [tipoConsulta, setTipoConsulta] = useState(null);
+  const [confirmacionVigencia, setConfirmacionVigencia] = useState(null);
+  const [generarEventoEquipo, setGenerarEventoEquipo] = useState(null);
 
-  // esta se usará para ir consultando los datos de la tabla que trae los equipos que pertenececen a un area
-  const [query, setQuery] = useState('');
-
-  //Para que la busqueda pueda darse sin necesidad de tomar en cuenta mayusculas y minusculas
-  const filteredEquipos = selectedEquipo && selectedEquipo.length > 0 ? selectedEquipo.filter(equipo => {
-    return equipo.nombre.toLowerCase().includes(query.toLowerCase());
-  }) : [];
-
-  // almacenar el estado de la consulta actual de las 4 posibles consultas que se le hacen al equipo
-  const [selectedConsulta, setSelectedConsulta] = useState(null);
-
-  // Si el tipo de consulta es para registro invima
   const [registrosInvima, setRegistrosInvima] = useState(null);
   const [showTablaRegistrosInvima, setShowTablaRegistrosInvima] = useState(false);
-  const [mostrarFormularioRegistrosInvima, setMostrarFormularioRegistrosInvima] = useState(true);
-
-
-  // Si el tipo de consulta es para eventos
-  const [eventosEquipo, setEventosEquipos] = useState(null)
+  const [eventosEquipo, setEventosEquipos] = useState(null);
   const [showModalEventosEquipo, setShowModalEventosEquipo] = useState(false);
-
-
   // Edicion del form de registro invima
   const [editableFields, setEditableFields] = useState({
     numero_registro: "",
@@ -48,18 +36,21 @@ function Areas() {
   });
 
   // edicion del form de eventos de equipo
-  const [editableFieldsEventos, setEditableFieldsEventos] = useState({
-    fecha: Date.now
-  })
-
-  const handleChangeEditable = (e) => {
+  const handleInputChange = (e, setState) => {
     const { name, value } = e.target;
-    setEditableFields({ ...editableFields, [name]: value });
+    setState(prevState => ({ ...prevState, [name]: value }));
   };
 
+  const handleChangeEditable = (e) => {
+    handleInputChange(e, setEditableFields);
+  };
+
+  const [editableFieldsEventos, setEditableFieldsEventos] = useState({
+    fecha: Date.now()
+  });
+  
   const handleChangeEditableEventos = (e) => {
-    const { name, value } = e.target;
-    setEditableFieldsEventos({ ...editableFieldsEventos, [name]: value });
+    handleInputChange(e, setEditableFieldsEventos);
   };
 
   const handleSaveChanges = () => {
@@ -78,236 +69,45 @@ function Areas() {
     }
 
     return (
-      <form className="form-container">
-        {registro ? (
-          <div>
-            <div className="form-group">
-              <label>Número de Registro:</label>
-              <input
-                type="text"
-                name="numero_registro"
-                value={editableFields.numero_registro || registro.numero_registro}
-                onChange={handleChangeEditable}
-              />
-            </div>
-            <div className="form-group">
-              <label>Vigencia:</label>
-              <input
-                type="text"
-                name="vigencia"
-                value={editableFields.vigencia || registro.vigencia}
-                onChange={handleChangeEditable}
-              />
-            </div>
-            <div className="form-group">
-              <label>Fecha:</label>
-              <input
-                type="text"
-                name="fecha"
-                value={editableFields.fecha || registro.fecha}
-                onChange={handleChangeEditable}
-              />
-            </div>
-            <div className="form-group">
-              <label>Documentos de evidencia:</label>
-              <input
-                type="text"
-                name="Documentos de evidencia"
-                value={editableFields.evidencia_documento || registro.evidencia_documento}
-                onChange={handleChangeEditable}
-              />
-            </div>
-            <div className="form-group">
-              <label>Evidencia fotografica:</label>
-              <input
-                type="text"
-                name="Evidencia fotografica"
-                value={editableFields.evidencia_fotografica || registro.evidencia_fotografica}
-                onChange={handleChangeEditable}
-              />
-            </div>
-            <div className="form-group">
-              <label>Evidencia Textual:</label>
-              <textarea
-                name="evidencia_textual"
-                value={editableFields.evidencia_textual || registro.evidencia_textual}
-                onChange={handleChangeEditable}
-                rows="4"
-                cols="50"
-              />
-            </div>
-          </div>
-        ) : null}
-        <div className="button-container">
-          <button type="button" onClick={handleSaveChanges}>Guardar</button>
-        </div>
-      </form>
+      <FormularioRegistroInvima
+        registrosInvima={registrosInvima}
+        editableFields={editableFields}
+        handleChangeEditable={handleChangeEditable}
+        handleSaveChanges={handleSaveChanges}
+      />
     );
-  };
-
-  // para obtener la fecha actual
-  const obtenerFechaActual = () => {
-    const fechaActual = new Date();
-    const year = fechaActual.getFullYear();
-    const month = (fechaActual.getMonth() + 1).toString().padStart(2, '0'); // Añade un cero inicial si es necesario
-    const day = fechaActual.getDate().toString().padStart(2, '0'); // Añade un cero inicial si es necesario
-    const fechaFormateada = `${year}-${month}-${day}`;
-
-    return fechaFormateada;
   };
 
   // render form de eventos de los equipos
-  const renderFormEventosEquipos = () => {
-    const registro = eventosEquipo ? eventosEquipo[0] : null;
+  const renderModalEventosEquipo = () => {
 
-    const mostrarTitulo = registro == null;
 
     return (
-      <div>
-        {mostrarTitulo && (
-          <div className="form-title">
-            <h3>El equipo no cuenta con eventos</h3>
-            <p>Puede generar un nuevo evento a continuación:</p>
-          </div>
-        )}
-        <form className="form-container">
-          {registro ? (
-            <div>
-              <div className="form-group">
-                <label>Estado del Evento:</label>
-                <input
-                  type="text"
-                  name="estado_evento"
-                  value={editableFieldsEventos.estado_evento || registro.estado_evento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Documento:</label>
-                <input
-                  type="text"
-                  name="evidencia_documento"
-                  value={editableFieldsEventos.evidencia_documento || registro.evidencia_documento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Fotográfica:</label>
-                <input
-                  type="text"
-                  name="evidencia_fotografica"
-                  value={editableFieldsEventos.evidencia_fotografica || registro.evidencia_fotografica}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Textual:</label>
-                <input
-                  type="text"
-                  name="evidencia_textual"
-                  value={editableFieldsEventos.evidencia_textual || registro.evidencia_textual}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Fecha:</label>
-                <input
-                  type="text"
-                  name="fecha"
-                  value={editableFieldsEventos.fecha || registro.fecha}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Tipo de Evento:</label>
-                <input
-                  type="text"
-                  name="tipo_evento"
-                  value={editableFieldsEventos.tipo_evento || registro.tipo_evento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div className="form-group">
-                <label>Estado del Evento:</label>
-                <input
-                  type="text"
-                  name="estado_evento"
-                  value={editableFieldsEventos.estado_evento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Documento:</label>
-                <input
-                  type="text"
-                  name="evidencia_documento"
-                  value={editableFieldsEventos.evidencia_documento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Fotográfica:</label>
-                <input
-                  type="text"
-                  name="evidencia_fotografica"
-                  value={editableFieldsEventos.evidencia_fotografica}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Evidencia Textual:</label>
-                <input
-                  type="text"
-                  name="evidencia_textual"
-                  value={editableFieldsEventos.evidencia_textual}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Fecha:</label>
-                <input
-                  type="text"
-                  name="fecha"
-                  value={obtenerFechaActual()}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-              <div className="form-group">
-                <label>Tipo de Evento:</label>
-                <input
-                  type="text"
-                  name="tipo_evento"
-                  value={editableFieldsEventos.tipo_evento}
-                  onChange={handleChangeEditableEventos}
-                />
-              </div>
-            </div>
-          )}
-          <div className="button-container">
-            <button type="button" onClick={handleSaveChanges}>Guardar</button>
-          </div>
-        </form>
-      </div>
+      <ModalEventosEquipo
+        eventosEquipo={eventosEquipo}
+        editableFieldsEventos={editableFieldsEventos}
+        handleChangeEditableEventos={handleChangeEditableEventos}
+        handleSaveChanges={handleSaveChanges}
+        handleCloseModal={() => setShowModalEventosEquipo(false)}
+      />
     );
   };
 
-  // espacio de busqueda que estará leyendo cada letra ingresada y filtrando los datos
-  const handleSearchChange = (e) => {
-    setQuery(e.target.value);
-  };
-
   // controlar la partura del modal que muestra la informacion del equipo consultado del area
-  const openModal = (equipoInfo) => {
+  const openModal = (equipoId) => {
     setShowModalEquipo(true);
-    setSelectedEquipoInfo(equipoInfo);
+    console.log(equipoId)
+    setSelectedEquipoId(equipoId);
   };
 
   const closeModal = () => {
     setShowModalEquipo(false);
-    setSelectedEquipoInfo(null);
+    setSelectedEquipoId(null);
+  };
+
+  const handleEquipoClick = (equipoId) => {
+    openModal(equipoId);
+    // Puedes realizar otras acciones según sea necesario
   };
 
   const handleConsultarAreas = () => {
@@ -323,7 +123,7 @@ function Areas() {
     fetch(`http://127.0.0.1:5000/areas/equipos/${id}`)
       .then(response => response.json())
       .then(data => {
-        setSelectedEquipo(data.equipos);
+        setEquipoByArea(data.equipos);
         console.log(data)
       })
       .catch(error => console.error('Error:', error));
@@ -333,10 +133,9 @@ function Areas() {
 
   // hangler de los 4 tipos de consultas posibles
   const handleConsultaClick = (tipoConsulta) => {
-    setSelectedConsulta(tipoConsulta);
 
     // Hacer la solicitud HTTP según el tipo de consulta
-    const idEquipo = selectedEquipoInfo.id; // Obtener el ID del equipo
+    const idEquipo = selectedEquipoId.id; // Obtener el ID del equipo
     let endpoint;
 
     switch (tipoConsulta) {
@@ -376,17 +175,29 @@ function Areas() {
       .catch(error => console.error('Error:', error));
   };
 
-
-  const [confirmacionVigencia, setConfirmacionVigencia] = useState(null);
-
   const handleChange = (e) => {
-    setConfirmacionVigencia(prevValue => !prevValue); // Cambia el valor de true a false y viceversa
+    setConfirmacionVigencia(prevValue => !prevValue);
 
-    // Agregar la llamada a handleConsultaClick si confirmacionVigencia es false
     if (confirmacionVigencia) {
       handleConsultaClick("invima");
+    } else {
+      console.log("No")
     }
   };
+
+  const handleChangeEvento = (e) => {
+    setGenerarEventoEquipo(prevValue => !prevValue); // Cambia el valor de true a false y viceversa
+
+    if (generarEventoEquipo) {
+      handleConsultaClick("eventos");
+    }
+  };
+
+  useEffect(() => {
+    if (selectedEquipoId) {
+      handleConsultaClick();
+    }
+  }, [tipoConsulta, selectedEquipoId]);
 
   return (
     <div>
@@ -395,74 +206,19 @@ function Areas() {
         <button onClick={handleConsultarAreas}>Consultar áreas</button>
       </div>
 
-      {showModal && (
-        <div className="modal">
-          <ul className='modalAreasList'>
-            {areas.map(area => (
-              <li className='modalAreasItems' key={area.id} onClick={() => handleAreaClick(area.id)}>
-                {area.nombre_area}
-              </li>
-            ))}
-          </ul>
-          <div className='modalButtonOut'>
-            <button onClick={() => setShowModal(false)}>Salir</button>
-          </div>
-        </div>
+      {showModal && <ModalAreas areas={areas} handleAreaClick={handleAreaClick} setShowModal={setShowModal} />}
+      {equipoByArea && equipoByArea.length > 0 && (
+        <TablaEquiposAreas filteredEquipos={equipoByArea} onEquipoClick={handleEquipoClick} />
       )}
 
-      <div className='containerBarraBusqueda'>
-        <input
-          type="text"
-          placeholder="Buscar por nombre"
-          value={query}
-          onChange={handleSearchChange}
-        />
-      </div>
-
-      {selectedEquipo && selectedEquipo.length > 0 && (
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Marca</th>
-                <th>Modelo</th>
-                <th>Serie</th>
-                <th>Propietario</th>
-                <th>Fecha de Fabricación</th>
-                <th>Fecha de Ingreso</th>
-                <th>Condición de Ingreso</th>
-                <th>Riesgo</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredEquipos.map(equipo => (
-                <tr key={equipo.id} onClick={() => openModal(equipo)}>
-                  <td>{equipo.nombre}</td>
-                  <td>{equipo.marca}</td>
-                  <td>{equipo.modelo}</td>
-                  <td>{equipo.serie}</td>
-                  <td>{equipo.propietario}</td>
-                  <td>{equipo.fecha_fabricacion}</td>
-                  <td>{equipo.fecha_ingreso}</td>
-                  <td>{equipo.condicion_ingreso}</td>
-                  <td>{equipo.riesgo}</td>
-                </tr>
-              ))}
-
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* Aca va el modal que mostrará la informacion que puede consultar de cada equipo */}
+      {/* Aca va el modal que mostrará la informacion que puede consultar del equipo seleccionado */}
       {showModalEquipo && (
         <div className="modalConsultasEquipo">
           <div className="modal-content">
-            {selectedEquipoInfo && (
+            {selectedEquipoId && (
               <div className='modal-content-consultas'>
                 <div className='modal-content-consulta-tittle'>
-                  <p>Nombre Equipo: {selectedEquipoInfo.nombre}</p>
+                  <p>Nombre Equipo: {selectedEquipoId.nombre}</p>
                 </div>
                 <div className='modal-content-consulta-buttons'>
                   <button onClick={() => {
@@ -479,7 +235,6 @@ function Areas() {
                   }}>Eventos</button>
                   <button onClick={() => handleConsultaClick("calibraciones")}>Calibraciones</button>
                 </div>
-                {/* Agrega más campos de información según tus necesidades */}
               </div>
             )}
             <div className='modal-content-consulta-button-close'>
@@ -488,8 +243,6 @@ function Areas() {
           </div>
         </div>
       )}
-
-      {/* Aca iran los modales para los 4 tipos de consultas*/}
 
       {/* Para mostrar el modal de la consulta de registro invima */}
       {showTablaRegistrosInvima && (
@@ -505,7 +258,7 @@ function Areas() {
                   <input
                     type="radio"
                     value="si"
-                    checked={confirmacionVigencia === true}
+                    checked={confirmacionVigencia === false}
                     onChange={handleChange}
                   />
                   Sí
@@ -514,7 +267,7 @@ function Areas() {
                   <input
                     type="radio"
                     value="no"
-                    checked={confirmacionVigencia === false}
+                    checked={confirmacionVigencia === true}
                     onChange={handleChange}
                   />
                   No
@@ -535,14 +288,40 @@ function Areas() {
 
       {/* Para mostrar el modal de la consulta de eventos */}
       {showModalEventosEquipo && (
-        <div className='modalEventos'>
-          <div>
-            {renderFormEventosEquipos()}
+        <div className="modalFormularioEventos">
+          <p className='modalFormularioEventosTittle'>Eventos: {selectedEquipoId.nombre}</p>
+          <div className='modalEventosSelectores'>
+            <label>
+              <input
+                type="radio"
+                checked={setGenerarEventoEquipo === true}
+                onChange={handleChangeEvento}
+              />
+              Conocer Eventos
+            </label>
+            <label>
+              <input
+                type="radio"
+                checked={setGenerarEventoEquipo === false}
+                onChange={handleChangeEvento}
+              />
+              Generar Evento
+            </label>
           </div>
-          <div className='modalEventosCerrarEventosContainer'>
-            <button onClick={() => setShowModalEventosEquipo(false)}>cerrar eventos</button>
+          <div className='modalesEventos'>
+            {generarEventoEquipo === true ? (
+              <p className='textUpdateEvento'>Todo está actualizado</p>
+            ) : (
+              renderModalEventosEquipo()
+            )}
           </div>
-
+          <div className='cerrarConsultaEvento'>
+            <button onClick={() => {
+              setShowModalEventosEquipo(false);
+              setEventosEquipos(false);
+              setGenerarEventoEquipo(null)
+            }}>Cerrar Formulario</button>
+          </div>
         </div>
       )}
     </div>
