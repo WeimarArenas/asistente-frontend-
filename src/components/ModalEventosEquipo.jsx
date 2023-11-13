@@ -18,14 +18,14 @@ const ModalEventosEquipo = ({ eventosEquipo, editableFieldsEventos, handleChange
 		const mostrarTitulo = registro == null;
 
 		return (
-			<div>
+			<div className='form'>
 				{mostrarTitulo && (
 					<div className="form-title">
 						<h3>El equipo no cuenta con eventos</h3>
 						<p>Puede generar un nuevo evento a continuación:</p>
 					</div>
 				)}
-				<form className="form-container">
+				<form className="form">
 					{registro ? (
 						<div>
 							<div className="form-group">
@@ -131,7 +131,7 @@ const ModalEventosEquipo = ({ eventosEquipo, editableFieldsEventos, handleChange
 								/>
 							</div>
 							<div className="form-group">
-								<label>Tipo de Evento:</label>
+								<label>Tipo de Eventoooo:</label>
 								<input
 									type="text"
 									name="tipo_evento"
@@ -150,11 +150,10 @@ const ModalEventosEquipo = ({ eventosEquipo, editableFieldsEventos, handleChange
 	};
 
 	return (
-		<div className='modalEventos'>
+		<div className='modalInteriorFormularioEventos'>
 			<div>
 				{renderFormEventosEquipos()}
 			</div>
-			<button onClick={handleCloseModal}>Cerrar eventos</button>
 		</div>
 	);
 };

@@ -239,3 +239,93 @@
     max-height: 700px; /* Ajusta esto según tus necesidades */
     overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido excede la altura máxima */
 }
+
+.modalFormularioEventos{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+    min-width: 400px;
+    max-width: 600px;
+    z-index: 9999;
+    padding: 10px 40px;
+    border-radius: 10px;
+    /* Establece una altura máxima y activa el desplazamiento vertical */
+    max-height: 900px; /* Ajusta esto según tus necesidades */
+    min-height: 700px;
+    overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido excede la altura máxima */
+}
+
+.modalFormularioEventosTittle{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.modalEventosSelectores{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.modalEventosSelectores > label{
+    margin-left: 20px;
+}
+
+.modalesEventos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+
+
+.modalInteriorFormularioEventos{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+    min-width: 400px;
+    max-width: 550px;
+    z-index: 9999;
+    padding: 10px 40px;
+    border-radius: 10px;
+    /* Establece una altura máxima y activa el desplazamiento vertical */
+    max-height: 600px; /* Ajusta esto según tus necesidades */
+    min-height: 400px;
+    overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido excede la altura máxima */
+    display: flex;
+    flex-direction: column;
+}
+
+.cerrarConsultaEvento{
+    width: 100%;
+    text-align: center;
+}
+
+.cerrarConsultaEvento > button{
+    font-size: 18px;
+    padding: 8px 12px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.cerrarConsultaEvento > button:hover{
+    color: white;
+    background-color: #4361ee;
+}
+
+.textUpdateEvento{
+    font-size: 20px;
+    font-weight: 600;
+}

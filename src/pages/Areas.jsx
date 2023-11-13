@@ -24,8 +24,8 @@ function Areas() {
   // Si el tipo de consulta es para registro invima
   const [registrosInvima, setRegistrosInvima] = useState(null);
   const [showTablaRegistrosInvima, setShowTablaRegistrosInvima] = useState(false);
-
-
+  
+  
   // Si el tipo de consulta es para eventos
   const [eventosEquipo, setEventosEquipos] = useState(null)
   const [showModalEventosEquipo, setShowModalEventosEquipo] = useState(false);
@@ -187,6 +187,17 @@ function Areas() {
     // Agregar la llamada a handleConsultaClick si confirmacionVigencia es false
     if (confirmacionVigencia) {
       handleConsultaClick("invima");
+    } else {
+      console.log("No")
+    }
+  };
+
+  const handleChangeEvento = (e) => {
+    setGenerarEventoEquipo(prevValue => !prevValue); // Cambia el valor de true a false y viceversa
+
+    // Agregar la llamada a handleConsultaClick si confirmacionVigencia es false
+    if (generarEventoEquipo) {
+      handleConsultaClick("eventos");
     }
   };
 
@@ -249,7 +260,7 @@ function Areas() {
                   <input
                     type="radio"
                     value="si"
-                    checked={confirmacionVigencia === true}
+                    checked={confirmacionVigencia === false}
                     onChange={handleChange}
                   />
                   Sí
@@ -258,7 +269,7 @@ function Areas() {
                   <input
                     type="radio"
                     value="no"
-                    checked={confirmacionVigencia === false}
+                    checked={confirmacionVigencia === true}
                     onChange={handleChange}
                   />
                   No
@@ -279,28 +290,37 @@ function Areas() {
 
       {/* Para mostrar el modal de la consulta de eventos */}
       {showModalEventosEquipo && (
-        <div className="modalFormularioRegistrosInvima">
-          <div>
+        <div className="modalFormularioEventos">
+          <p className='modalFormularioEventosTittle'>Eventos: {selectedEquipoId.nombre}</p>
+          <div className='modalEventosSelectores'>
             <label>
               <input
                 type="radio"
-                checked={generarEventoEquipo === false}
-                onChange={handleChange}
+                checked={setGenerarEventoEquipo === true}
+                onChange={handleChangeEvento}
               />
               Conocer Eventos
             </label>
             <label>
               <input
                 type="radio"
-                value="no"
-                checked={generarEventoEquipo === false}
-                onChange={handleChange}
+                checked={setGenerarEventoEquipo === false}
+                onChange={handleChangeEvento}
               />
-              Generar evento
+              Generar Evento
             </label>
+          </div>
+          <div className='modalesEventos'>
+            {generarEventoEquipo === true && <p className='textUpdateEvento'>Todo está actualizado</p>}
             {generarEventoEquipo === false && renderModalEventosEquipo()}
           </div>
-          {generarEventoEquipo === true && <p>Todo está actualizado</p>}
+          <div className='cerrarConsultaEvento'>
+          <button onClick={() => {
+                setShowModalEventosEquipo(false);
+                setEventosEquipos(false);
+                setGenerarEventoEquipo(null)
+              }}>Cerrar Formulario</button>
+          </div>
         </div>
       )}
     </div>
