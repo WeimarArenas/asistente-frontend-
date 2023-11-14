@@ -4,12 +4,17 @@ import Login from '../pages/Login'
 import Home from '../pages/Home'
 import NotFound from "../pages/NoFound";
 import Areas from "../pages/Areas";
+import Register from "../pages/Register";
 
 export const router = createBrowserRouter([
     {
         path: '/',
         element: <Login />,
         errorElement: <NotFound />,
+    },
+    {
+        path: '/Register',
+        element: <Register />
     },
     {
         path: '/home',

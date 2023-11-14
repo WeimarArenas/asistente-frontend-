@@ -10,7 +10,8 @@
 .cardLogin{
     display: flex;
     flex-direction: column;
-    margin-top: 8%;
+    margin-top: 4%;
+    margin-bottom: 5px;
     padding: 50px;
     text-align: center;
     border-radius: 10px;
@@ -49,10 +50,14 @@
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     background-color: #fff;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .cardLoginButtonLogin:hover{
     background-color: #7209b7;
+    color: white;
+    cursor: pointer;
 }
 
 .cardLoginButtonLoginText {
@@ -67,3 +72,37 @@
     color: white; /* Cambia el color del texto a blanco cuando pasas el cursor por encima */
 }
 
+.cardRegister{
+    margin-top: 5px;
+    padding: 10px, 20px;
+    background-color: #ededed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cardRegister > p{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.cardRegister > button{
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #4361ee;
+    width: 80%;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.8);
+}
+
+.cardRegister > button:hover{
+    cursor: pointer;
+    background-color: #7209b7;
+}
+
+.linkRegister{
+    color: #ffff;
+    text-decoration: none;
+}
