@@ -9,7 +9,12 @@ function ConsultasAleatorias() {
 	const [resultadosConsulta, setResultadosConsulta] = useState([]);
 	const [tipoConsultaAleatoria, setTipoConsultaAleatoria] = useState("");
 
-	const arrayTypoConsultas = ["registros_invima", "mantenimiento", "eventos", "calibraciones"]
+	const [registroInvima, setRegistroInvima] = useState(null);
+	const [mantenimientos, setMantenimientos] = useState(null);
+	const [calibraciones, setCalibraciones] = useState(null)
+	const [eventos, setEventos] = useState(null)
+
+	const arrayTypoConsultas = ["registros_invima", "mantenimientos", "eventos", "calibraciones"]
 
 	const handleGenerarTipoConsultaAleatoria = () => {
 		const tipoAleatorio =
@@ -84,6 +89,35 @@ function ConsultasAleatorias() {
 				.then(data => {
 					// Puedes hacer algo con los resultados, por ejemplo, mostrarlos en un modal
 					console.log(`Resultados de la consulta ${tipoConsultaAleatoria}:`, data[tipoConsultaAleatoria][0]);
+
+					switch (tipoConsultaAleatoria) {
+						case "registros_invima":
+							setRegistroInvima(data[tipoConsultaAleatoria]);
+							setEventos(null);
+							setCalibraciones(null);
+							setMantenimientos(null);
+							break;
+						case "eventos":
+							setEventos(data[tipoConsultaAleatoria]);
+							setRegistroInvima(null);
+							setCalibraciones(null);
+							setMantenimientos(null);
+							break;
+						case "calibraciones":
+							setCalibraciones(data[tipoConsultaAleatoria]);
+							setRegistroInvima(null);
+							setEventos(null);
+							setMantenimientos(null);
+							break;
+						case "mantenimientos":
+							setMantenimientos(data[tipoConsultaAleatoria]);
+							setRegistroInvima(null);
+							setEventos(null);
+							setCalibraciones(null);
+							break;
+						default:
+							break;
+					}
 				})
 				.catch(error => console.error('Error:', error));
 		} else {
@@ -97,8 +131,8 @@ function ConsultasAleatorias() {
 			<Header />
 			<div className="consultasAleatoriasContainer">
 				<button className="consultasAletaroriasButton" onClick={() => {
-						handleGenerarConsulta();
-						handleGenerarTipoConsultaAleatoria()
+					handleGenerarConsulta();
+					handleGenerarTipoConsultaAleatoria()
 				}}>Generar Consulta</button>
 				{consultaAleatoria.length > 0 && (
 					<div>
@@ -140,9 +174,137 @@ function ConsultasAleatorias() {
 						)}
 					</div>
 				)}
+
+				{/* Aca se debe de mostrar una tabla con los datos del equipo, 
+					la tabla debe de variar en campos dependiendo del tipo de consulta */}
+				{tipoConsultaAleatoria && (
+					<div>
+						<h2>Datos de Consulta {tipoConsultaAleatoria}</h2>
+						{tipoConsultaAleatoria === "registros_invima" && registroInvima && (
+							<React.Fragment>
+								{registroInvima.length > 0 ? (
+									<table>
+										<thead>
+											<tr>
+												<th>Evidencia Documento</th>
+												<th>Evidencia Fotográfica</th>
+												<th>Evidencia Textual</th>
+												<th>Fecha</th>
+												<th>Número de Registro</th>
+												<th>Vigencia</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>{registroInvima.evidencia_documento}</td>
+												<td>{registroInvima.evidencia_fotografica}</td>
+												<td>{registroInvima.evidencia_textual}</td>
+												<td>{registroInvima.fecha}</td>
+												<td>{registroInvima.numero_registro}</td>
+												<td>{registroInvima.vigencia}</td>
+											</tr>
+										</tbody>
+									</table>
+								) : (
+									<p>No hay datos de registro invima para ese equipo que se puedan mostrar.</p>
+								)}
+							</React.Fragment>
+						)}
+						{tipoConsultaAleatoria === "eventos" && eventos && (
+							<React.Fragment>
+								{eventos.length > 0 ? (
+									<table>
+										<thead>
+											<tr>
+												<th>Estado del Evento</th>
+												<th>Evidencia Documento</th>
+												<th>Evidencia Fotográfica</th>
+												<th>Evidencia Textual</th>
+												<th>Fecha</th>
+												<th>Tipo de Evento</th>
+											</tr>
+										</thead>
+										<tbody>
+											{/* Mapea los eventos y muestra las filas correspondientes */}
+											{eventos.map((evento) => (
+												<tr key={evento.id}>
+													<td>{evento.estado_evento}</td>
+													<td>{evento.evidencia_documento}</td>
+													<td>{evento.evidencia_fotografica}</td>
+													<td>{evento.evidencia_textual}</td>
+													<td>{evento.fecha}</td>
+													<td>{evento.tipo_evento}</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								) : (
+									<p>No hay datos de eventos para ese equipo para mostrar.</p>
+								)}
+							</React.Fragment>
+						)}
+						{tipoConsultaAleatoria === "calibraciones" && calibraciones && (
+							<React.Fragment>
+								{calibraciones.length > 0 ? (
+									<table>
+										<thead>
+											<tr>
+												<th>Estado</th>
+												<th>Evidencia Documento</th>
+												<th>Evidencia Fotográfica</th>
+												<th>Evidencia Textual</th>
+												<th>Fecha</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>{calibraciones.estado}</td>
+												<td>{calibraciones.evidencia_documento}</td>
+												<td>{calibraciones.evidencia_fotografica}</td>
+												<td>{calibraciones.evidencia_textual}</td>
+												<td>{calibraciones.fecha}</td>
+											</tr>
+										</tbody>
+									</table>
+								) : (<p>No hay datos de calibraciones de ese equipo para mostrar.</p>)}
+							</React.Fragment>
+						)}
+						{tipoConsultaAleatoria === "mantenimientos" && mantenimientos && (
+							<React.Fragment>
+								{mantenimientos.length > 0 ? (
+									<table>
+										<thead>
+											<tr>
+												<th>Estado</th>
+												<th>Evidencia Documento</th>
+												<th>Evidencia Fotográfica</th>
+												<th>Evidencia Textual</th>
+												<th>Fecha</th>
+												<th>Tipo de Mantenimiento</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>{mantenimientos.estado}</td>
+												<td>{mantenimientos.evidencia_documento}</td>
+												<td>{mantenimientos.evidencia_fotografica}</td>
+												<td>{mantenimientos.evidencia_textual}</td>
+												<td>{mantenimientos.fecha}</td>
+												<td>{mantenimientos.tipo_mantenimiento}</td>
+											</tr>
+										</tbody>
+									</table>
+								) : (
+									<p>No hay datos de mantenimientos de ese equipo.</p>
+								)}
+							</React.Fragment>
+						)}
+					</div>
+				)};
 			</div>
 		</div>
-	);
-}
+
+	)
+};
 
 export default ConsultasAleatorias;
