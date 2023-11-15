@@ -6,10 +6,11 @@ import ModalAreas from '../components/ModalAreas';
 import TablaEquiposAreas from '../components/TablaEquiposAreas';
 import FormularioRegistroInvima from '../components/FormularioRegistroInvima';
 import ModalEventosEquipo from '../components/ModalEventosEquipo';
+import Mantenimientos from '../components/Matenimientos';
+import Calibraciones from '../components/Calibraciones';
 
 // import de los estilos
 import '../styles/areas.css'
-import Mantenimientos from '../components/Matenimientos';
 
 function Areas() {
   const [areas, setAreas] = useState([]);
@@ -27,8 +28,11 @@ function Areas() {
   const [eventosEquipo, setEventosEquipos] = useState(null);
   const [showModalEventosEquipo, setShowModalEventosEquipo] = useState(false);
 
-  const [dataMantenimeintos, setDataMantenimiento] = useState(null)
+  const [dataMantenimeintos, setDataMantenimiento] = useState(null);
   const [showModalMantenimientos, setShowModalMantenimientos] = useState(false);
+
+  const [dataCalibraciones, setDataCalibraciones] = useState(null);
+  const [showModalCalibraciones, setShowModalCalibraciones] = useState(false);
 
   // Edicion del form de registro invima
   const [editableFields, setEditableFields] = useState({
@@ -176,7 +180,10 @@ function Areas() {
             setDataMantenimiento(data.mantenimientos);
             showModalMantenimientos(true)
             break;
-          // ... (otros casos)
+          case "calibraciones":
+            setDataCalibraciones(data.eventos);
+            showModalCalibraciones(true)
+            break;
           default:
             break;
         }
@@ -184,7 +191,7 @@ function Areas() {
       .catch(error => console.error('Error:', error));
   };
 
-  const handleChange = (e) => {
+  const handleChange = () => {
     setConfirmacionVigencia(prevValue => !prevValue);
 
     if (confirmacionVigencia) {
@@ -237,7 +244,10 @@ function Areas() {
                     handleConsultaClick("eventos")
                     setGenerarEventoEquipo(true)
                   }}>Eventos</button>
-                  <button onClick={() => handleConsultaClick("calibraciones")}>Calibraciones</button>
+                  <button onClick={() => {
+                    setShowModalCalibraciones(true)
+                    handleConsultaClick("calibraciones")
+                    }}>Calibraciones</button>
                 </div>
               </div>
             )}
@@ -312,11 +322,23 @@ function Areas() {
       {showModalMantenimientos && (
         <div className='modalMantenimientos'>
           <div>
-            <Mantenimientos mantenimientos={dataMantenimeintos} />
+            <Mantenimientos 
+              mantenimientos={dataMantenimeintos} 
+            />
           </div>
           <div>
-            <button onClick={() => {setShowModalMantenimientos(false)}}>Cerrar formulario</button>
+            <button onClick={() => {setShowModalMantenimientos(false)}}>Cerrar</button>
           </div>
+        </div>
+      )}
+
+      {/*Modal de formulario de calibraciones */}
+      {showModalCalibraciones && (
+        <div className='modalMantenimientos'>
+          <Calibraciones calibraciones={dataCalibraciones} />
+          <button onClick={() => {
+            setShowModalCalibraciones(false)
+          }}>Cerrar</button>
         </div>
       )}
     </div>

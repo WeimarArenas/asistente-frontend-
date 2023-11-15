@@ -1,12 +1,27 @@
 import React, { useState } from "react";
 
 const Mantenimientos = ({ mantenimientos, onSaveChanges }) => {
-    const [tipoMantenimiento, setTipoMantenimiento] = useState("");
+    const [tipoMantenimiento, setTipoMantenimiento] = useState("Tipo mantenimiento");
     const [estado, setEstado] = useState("");
     const [fecha, setFecha] = useState("");
     const [evidenciaFotografica, setEvidenciaFotografica] = useState("");
     const [evidenciaTextual, setEvidenciaTextual] = useState("");
     const [evidenciaDocumento, setEvidenciaDocumento] = useState("");
+
+	const TipoMantenimiento = () => {
+		return (
+			<select
+				name="tipoMantenimiento"
+				value={tipoMantenimiento}
+				onChange={(e) => setTipoMantenimiento(e.target.value)}
+			>
+				<option value=""></option>
+				<option value="Preventivo">Preventivo</option>
+				<option value="Predictivo">Predictivo</option>
+				<option value="Correctivo">Correctivo</option>
+			</select>
+		);
+	};
 
     const handleSave = () => {
         onSaveChanges({
@@ -39,11 +54,7 @@ const Mantenimientos = ({ mantenimientos, onSaveChanges }) => {
                     <h4>Ingrese un nuevo mantenimiento</h4>
                     {/* Formulario para ingresar nuevos datos */}
                     <label>Tipo de mantenimiento:</label>
-                    <input
-                        type="text"
-                        value={tipoMantenimiento}
-                        onChange={(e) => setTipoMantenimiento(e.target.value)}
-                    />
+                    <TipoMantenimiento />
                     <label>Estado:</label>
                     <input
                         type="text"
@@ -74,7 +85,7 @@ const Mantenimientos = ({ mantenimientos, onSaveChanges }) => {
                         value={evidenciaDocumento}
                         onChange={(e) => setEvidenciaDocumento(e.target.value)}
                     />
-                    <button onClick={handleSave}>Guardar</button>
+                    <button>Guardar</button>
                 </div>
             )}
         </div>

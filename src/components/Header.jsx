@@ -8,7 +8,7 @@ function Header() {
         <li>
           <Link to="/generar-consulta" className='headerMenuItemStart'>Generar consulta de equipo</Link>
           <ul className="headerSubmenuGenerarConsulta">
-            <li><Link to="/generar-consulta/aleatorio">Aleatorio</Link></li>
+            <li><Link to="/consulta-aleatoria">Aleatorio</Link></li>
             <li><Link to="/areas">Manual</Link></li>
           </ul>
         </li>
