@@ -1,6 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const ModalEventosEquipo = ({ eventosEquipo, editableFieldsEventos, handleChangeEditableEventos, handleSaveChanges, handleCloseModal }) => {
+	const [nivel, setNivel] = useState("level");
+	const NivelDropdown = () => {
+		return (
+			<select
+				name="nivel"
+				value={nivel}
+				onChange={(e) => setNivel(e.target.value)}
+			>
+				<option value=""></option>
+				<option value="leve">Level</option>
+				<option value="moderado">Moderado</option>
+				<option value="severo">Severo</option>
+			</select>
+		);
+	};
+
 	const renderFormEventosEquipos = () => {
 
 		// para obtener la fecha actual
@@ -28,6 +44,10 @@ const ModalEventosEquipo = ({ eventosEquipo, editableFieldsEventos, handleChange
 				<form className="form">
 					{registro ? (
 						<div>
+							<div className="form-group">
+								<label>Tipo de Evento:</label>
+								<NivelDropdown />
+							</div>
 							<div className="form-group">
 								<label>Estado del Evento:</label>
 								<input
@@ -73,18 +93,13 @@ const ModalEventosEquipo = ({ eventosEquipo, editableFieldsEventos, handleChange
 									onChange={handleChangeEditableEventos}
 								/>
 							</div>
-							<div className="form-group">
-								<label>Tipo de Evento:</label>
-								<input
-									type="text"
-									name="tipo_evento"
-									value={editableFieldsEventos.tipo_evento || registro.tipo_evento}
-									onChange={handleChangeEditableEventos}
-								/>
-							</div>
 						</div>
 					) : (
 						<div>
+							<div className="form-group">
+								<label>Tipo de Evento:</label>
+								<NivelDropdown />
+							</div>
 							<div className="form-group">
 								<label>Estado del Evento:</label>
 								<input
@@ -127,15 +142,6 @@ const ModalEventosEquipo = ({ eventosEquipo, editableFieldsEventos, handleChange
 									type="text"
 									name="fecha"
 									value={obtenerFechaActual()}
-									onChange={handleChangeEditableEventos}
-								/>
-							</div>
-							<div className="form-group">
-								<label>Tipo de Eventoooo:</label>
-								<input
-									type="text"
-									name="tipo_evento"
-									value={editableFieldsEventos.tipo_evento}
 									onChange={handleChangeEditableEventos}
 								/>
 							</div>

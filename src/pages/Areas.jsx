@@ -219,6 +219,7 @@ function Areas() {
               <div className='modal-content-consultas'>
                 <div className='modal-content-consulta-tittle'>
                   <p>Nombre Equipo: {selectedEquipoId.nombre}</p>
+                  <p>Serie Equipo: {selectedEquipoId.serie}</p>
                 </div>
                 <div className='modal-content-consulta-buttons'>
                   <button onClick={() => {
@@ -232,6 +233,7 @@ function Areas() {
                   <button onClick={() => {
                     setShowModalEventosEquipo(true);
                     handleConsultaClick("eventos")
+                    setGenerarEventoEquipo(true)
                   }}>Eventos</button>
                   <button onClick={() => handleConsultaClick("calibraciones")}>Calibraciones</button>
                 </div>
@@ -290,30 +292,9 @@ function Areas() {
       {showModalEventosEquipo && (
         <div className="modalFormularioEventos">
           <p className='modalFormularioEventosTittle'>Eventos: {selectedEquipoId.nombre}</p>
-          <div className='modalEventosSelectores'>
-            <label>
-              <input
-                type="radio"
-                checked={setGenerarEventoEquipo === true}
-                onChange={handleChangeEvento}
-              />
-              Conocer Eventos
-            </label>
-            <label>
-              <input
-                type="radio"
-                checked={setGenerarEventoEquipo === false}
-                onChange={handleChangeEvento}
-              />
-              Generar Evento
-            </label>
-          </div>
+          <p>Serie: {selectedEquipoId.serie}</p>
           <div className='modalesEventos'>
-            {generarEventoEquipo === true ? (
-              <p className='textUpdateEvento'>Todo está actualizado</p>
-            ) : (
-              renderModalEventosEquipo()
-            )}
+            {generarEventoEquipo === true && renderModalEventosEquipo()}
           </div>
           <div className='cerrarConsultaEvento'>
             <button onClick={() => {
