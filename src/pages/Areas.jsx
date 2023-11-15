@@ -9,6 +9,7 @@ import ModalEventosEquipo from '../components/ModalEventosEquipo';
 
 // import de los estilos
 import '../styles/areas.css'
+import Mantenimientos from '../components/Matenimientos';
 
 function Areas() {
   const [areas, setAreas] = useState([]);
@@ -25,6 +26,10 @@ function Areas() {
   const [showTablaRegistrosInvima, setShowTablaRegistrosInvima] = useState(false);
   const [eventosEquipo, setEventosEquipos] = useState(null);
   const [showModalEventosEquipo, setShowModalEventosEquipo] = useState(false);
+
+  const [dataMantenimeintos, setDataMantenimiento] = useState(null)
+  const [showModalMantenimientos, setShowModalMantenimientos] = useState(false);
+
   // Edicion del form de registro invima
   const [editableFields, setEditableFields] = useState({
     numero_registro: "",
@@ -48,7 +53,7 @@ function Areas() {
   const [editableFieldsEventos, setEditableFieldsEventos] = useState({
     fecha: Date.now()
   });
-  
+
   const handleChangeEditableEventos = (e) => {
     handleInputChange(e, setEditableFieldsEventos);
   };
@@ -167,6 +172,10 @@ function Areas() {
             setEventosEquipos(data.eventos);
             setShowModalEventosEquipo(true)
             break;
+          case "mantenimientos":
+            setDataMantenimiento(data.mantenimientos);
+            showModalMantenimientos(true)
+            break;
           // ... (otros casos)
           default:
             break;
@@ -182,14 +191,6 @@ function Areas() {
       handleConsultaClick("invima");
     } else {
       console.log("No")
-    }
-  };
-
-  const handleChangeEvento = (e) => {
-    setGenerarEventoEquipo(prevValue => !prevValue); // Cambia el valor de true a false y viceversa
-
-    if (generarEventoEquipo) {
-      handleConsultaClick("eventos");
     }
   };
 
@@ -229,6 +230,7 @@ function Areas() {
 
                   <button onClick={() => {
                     handleConsultaClick("mantenimientos");
+                    setShowModalMantenimientos(true)
                   }}>Mantenimientos</button>
                   <button onClick={() => {
                     setShowModalEventosEquipo(true);
@@ -302,6 +304,18 @@ function Areas() {
               setEventosEquipos(false);
               setGenerarEventoEquipo(null)
             }}>Cerrar Formulario</button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para el formulario y consultas de mantenimientos */}
+      {showModalMantenimientos && (
+        <div className='modalMantenimientos'>
+          <div>
+            <Mantenimientos mantenimientos={dataMantenimeintos} />
+          </div>
+          <div>
+            <button onClick={() => {setShowModalMantenimientos(false)}}>Cerrar formulario</button>
           </div>
         </div>
       )}
