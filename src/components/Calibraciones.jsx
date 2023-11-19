@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/modalCalibraciones.css'
 
 const Calibraciones = ({ calibraciones }) => {
     const [estado, setEstado] = useState("");
@@ -37,25 +38,25 @@ const Calibraciones = ({ calibraciones }) => {
     };
 
     return (
-        <div>
+        <div className="calibraciones-container">
             <h2>Calibraciones</h2>
-            <form onSubmit={handleSubmit}>
-                <label>Estado:</label>
-                <input type="text" value={estado} onChange={(e) => setEstado(e.target.value)} />
+            <form onSubmit={handleSubmit} className="calibraciones-form">
+                <label className="form-label">Estado:</label>
+                <input type="text" value={estado} onChange={(e) => setEstado(e.target.value)} className="form-input" />
 
-                <label>Evidencia Documento:</label>
-                <input type="text" value={evidenciaDocumento} onChange={(e) => setEvidenciaDocumento(e.target.value)} />
+                <label className="form-label">Evidencia Documento:</label>
+                <input type="text" value={evidenciaDocumento} onChange={(e) => setEvidenciaDocumento(e.target.value)} className="form-input" />
 
-                <label>Evidencia Fotográfica:</label>
-                <input type="text" value={evidenciaFotografica} onChange={(e) => setEvidenciaFotografica(e.target.value)} />
+                <label className="form-label">Evidencia Fotográfica:</label>
+                <input type="text" value={evidenciaFotografica} onChange={(e) => setEvidenciaFotografica(e.target.value)} className="form-input" />
 
-                <label>Evidencia Textual:</label>
-                <input type="text" value={evidenciaTextual} onChange={(e) => setEvidenciaTextual(e.target.value)} />
+                <label className="form-label">Evidencia Textual:</label>
+                <input type="text" value={evidenciaTextual} onChange={(e) => setEvidenciaTextual(e.target.value)} className="form-input" />
 
-                <label>Fecha:</label>
-                <input type="text" value={fecha} onChange={(e) => setFecha(e.target.value)} />
+                <label className="form-label">Fecha:</label>
+                <input type="text" value={fecha} onChange={(e) => setFecha(e.target.value)} className="form-input" />
 
-                <button type="submit">Guardar</button>
+                <button type="submit" className="form-button">Guardar</button>
             </form>
         </div>
     );

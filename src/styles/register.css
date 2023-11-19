@@ -11,19 +11,32 @@
 }
 
 .cardRegister {
-    width: 350px;
+    margin-top: 15px;
+    width: 310px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #4361ee;
-    color: white;
+    color: black;
+    text-align: center;
+}
+
+.cardRegister1 {
+    margin-top: 15px;
+    width: 290px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #F5F7F8;
+    color: black;
     text-align: center;
 }
 
 .cardRegisterInput {
     margin-bottom: 15px;
-    width: 70%;
+    width: 60%;
     margin-top: 15px;
 }
 

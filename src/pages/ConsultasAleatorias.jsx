@@ -123,7 +123,7 @@ function ConsultasAleatorias() {
 		} else {
 			console.error('Tipo de consulta aleatoria no seleccionado.');
 		}
-	};
+	}
 
 
 	return (
@@ -300,10 +300,9 @@ function ConsultasAleatorias() {
 							</React.Fragment>
 						)}
 					</div>
-				)};
+				)}
 			</div>
 		</div>
-
 	)
 };
 

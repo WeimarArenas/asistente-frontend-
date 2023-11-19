@@ -72,16 +72,16 @@ function Login() {
 
                 </div>
             </div>
-            <div style={{ background: '#ededed' }}>
-                <div className="mensajeVerificacion color">
+            <div>
+                <div className="mensajeVerificacion">
                     {ingresoIntentado && verificado === false && (
                         <p style={{ color: 'red', textAlign: 'center' }}>
                             Usuario no verificado. No se puede acceder.
                         </p>
                     )}
                 </div>
-                <div className="color">
-                    <div className="cardRegister color">
+                <div style={{ background: '#ededed', width: '80%' }}>
+                    <div className="cardRegister1">
                         <p>Si no posee una cuenta puede registrarse</p>
                         <button>
                             <Link to="/Register" className="linkRegister">Registrar usuario</Link>
