@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 
+import Invima from "../components/consultasAleatorias/Invima";
+
 import '../styles/consultasAleatorias.css'
+import Eventos from "../components/consultasAleatorias/Eventos";
+import Calibracion from "../components/consultasAleatorias/Calibracion";
+import Mantenimiento from "../components/consultasAleatorias/Mantenimiento";
 
 function ConsultasAleatorias() {
 	const [equipos, setEquipos] = useState([]);
@@ -13,6 +18,11 @@ function ConsultasAleatorias() {
 	const [mantenimientos, setMantenimientos] = useState(null);
 	const [calibraciones, setCalibraciones] = useState(null)
 	const [eventos, setEventos] = useState(null)
+
+	const [showModalInvima, setShowModalInvima] = useState(false);
+	const [showModalEvento, setShowModalEvento] = useState(false);
+	const [showModalCalibracion, setShowModalCalibracion] = useState(false);
+	const [showModalMantenimiento, setShowModalMantenimiento] = useState(false);
 
 	const arrayTypoConsultas = ["registros_invima", "mantenimientos", "eventos", "calibraciones"]
 
@@ -61,21 +71,21 @@ function ConsultasAleatorias() {
 		setResultadosConsulta(resultadosFiltrados);
 	};
 
-	const handleRealizarConsulta = (idEquipo) => {
+	const handleRealizarConsulta = (equipo) => {
 		let endpoint;
 
 		switch (tipoConsultaAleatoria) {
 			case "registros_invima":
-				endpoint = `http://127.0.0.1:5000/equipos/registros-invima/${idEquipo}`;
+				endpoint = `http://127.0.0.1:5000/equipos/registros-invima/${equipo.id}`;
 				break;
 			case "mantenimientos":
-				endpoint = `http://127.0.0.1:5000/equipos/mantenimientos/${idEquipo}`;
+				endpoint = `http://127.0.0.1:5000/equipos/mantenimientos/${equipo.id}`;
 				break;
 			case "eventos":
-				endpoint = `http://127.0.0.1:5000/equipos/eventos/${idEquipo}`;
+				endpoint = `http://127.0.0.1:5000/equipos/eventos/${equipo.id}`;
 				break;
 			case "calibraciones":
-				endpoint = `http://127.0.0.1:5000/equipos/calibraciones/${idEquipo}`;
+				endpoint = `http://127.0.0.1:5000/equipos/calibraciones/${equipo.id}`;
 				break;
 			default:
 				break;
@@ -89,6 +99,7 @@ function ConsultasAleatorias() {
 				.then(data => {
 					// Puedes hacer algo con los resultados, por ejemplo, mostrarlos en un modal
 					console.log(`Resultados de la consulta ${tipoConsultaAleatoria}:`, data[tipoConsultaAleatoria][0]);
+					console.log(`Cantidad de datos ${data[tipoConsultaAleatoria]}`)
 
 					switch (tipoConsultaAleatoria) {
 						case "registros_invima":
@@ -96,24 +107,38 @@ function ConsultasAleatorias() {
 							setEventos(null);
 							setCalibraciones(null);
 							setMantenimientos(null);
+							setShowModalEvento(false);
+							setShowModalCalibracion(false);
+							setShowModalInvima(true);
+
 							break;
 						case "eventos":
 							setEventos(data[tipoConsultaAleatoria]);
 							setRegistroInvima(null);
 							setCalibraciones(null);
 							setMantenimientos(null);
+							setShowModalInvima(false);
+							setShowModalCalibracion(false);
+							setShowModalEvento(true);
 							break;
 						case "calibraciones":
 							setCalibraciones(data[tipoConsultaAleatoria]);
 							setRegistroInvima(null);
 							setEventos(null);
 							setMantenimientos(null);
+							setShowModalEvento(false);
+							setShowModalInvima(false);
+							setShowModalCalibracion(true);
 							break;
 						case "mantenimientos":
 							setMantenimientos(data[tipoConsultaAleatoria]);
 							setRegistroInvima(null);
 							setEventos(null);
 							setCalibraciones(null);
+							setShowModalEvento(false);
+							setShowModalMantenimiento(false);
+							setShowModalInvima(false);
+							setShowModalMantenimiento(true);
 							break;
 						default:
 							break;
@@ -125,6 +150,10 @@ function ConsultasAleatorias() {
 		}
 	}
 
+	console.log("Datos de registroInvima:", registroInvima);
+	console.log("Datos de eventos:", eventos);
+	console.log("Datos de calibraciones:", calibraciones);
+	console.log("Datos de mantenimientos:", mantenimientos);
 
 	return (
 		<div>
@@ -137,9 +166,10 @@ function ConsultasAleatorias() {
 				{consultaAleatoria.length > 0 && (
 					<div>
 						{resultadosConsulta.length > 0 ? (
-							<table>
+							<table class="mi-tabla">
 								<thead>
 									<tr>
+										<th>Area Equipo</th>
 										<th>Nombre</th>
 										<th>Marca</th>
 										<th>Modelo</th>
@@ -153,6 +183,7 @@ function ConsultasAleatorias() {
 								<tbody>
 									{resultadosConsulta.map((equipo) => (
 										<tr key={equipo.id}>
+											<td>{equipo.nombre_area}</td>
 											<td>{equipo.nombre}</td>
 											<td>{equipo.marca}</td>
 											<td>{equipo.modelo}</td>
@@ -161,7 +192,7 @@ function ConsultasAleatorias() {
 											<td>{equipo.riesgo}</td>
 											<td>{equipo.serie}</td>
 											<td>
-												<button onClick={() => handleRealizarConsulta(equipo.id)}>
+												<button onClick={() => handleRealizarConsulta(equipo)}>
 													{tipoConsultaAleatoria}
 												</button>
 											</td>
@@ -179,127 +210,39 @@ function ConsultasAleatorias() {
 					la tabla debe de variar en campos dependiendo del tipo de consulta */}
 				{tipoConsultaAleatoria && (
 					<div>
-						<h2>Datos de Consulta {tipoConsultaAleatoria}</h2>
-						{tipoConsultaAleatoria === "registros_invima" && registroInvima && (
-							<React.Fragment>
-								{registroInvima.length > 0 ? (
-									<table>
-										<thead>
-											<tr>
-												<th>Evidencia Documento</th>
-												<th>Evidencia Fotográfica</th>
-												<th>Evidencia Textual</th>
-												<th>Fecha</th>
-												<th>Número de Registro</th>
-												<th>Vigencia</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>{registroInvima.evidencia_documento}</td>
-												<td>{registroInvima.evidencia_fotografica}</td>
-												<td>{registroInvima.evidencia_textual}</td>
-												<td>{registroInvima.fecha}</td>
-												<td>{registroInvima.numero_registro}</td>
-												<td>{registroInvima.vigencia}</td>
-											</tr>
-										</tbody>
-									</table>
-								) : (
-									<p>No hay datos de registro invima para ese equipo que se puedan mostrar.</p>
-								)}
-							</React.Fragment>
+						{tipoConsultaAleatoria === "registros_invima" && showModalInvima &&
+							<div className="ConsultaAleatoriaModalInvima">
+								<Invima registrosInvima={registroInvima} />
+							</div>
+						}
+						{tipoConsultaAleatoria === "eventos" && showModalEvento && (
+						<div>
+							<Eventos eventosEquipo={eventos}/>
+						</div>)}
+						{tipoConsultaAleatoria === "calibraciones" && showModalCalibracion && (
+							<div className="ConsultaAleatoriaModalInvima">
+								<Calibracion calibraciones={calibraciones}/>
+							</div>
 						)}
-						{tipoConsultaAleatoria === "eventos" && eventos && (
-							<React.Fragment>
-								{eventos.length > 0 ? (
-									<table>
-										<thead>
-											<tr>
-												<th>Estado del Evento</th>
-												<th>Evidencia Documento</th>
-												<th>Evidencia Fotográfica</th>
-												<th>Evidencia Textual</th>
-												<th>Fecha</th>
-												<th>Tipo de Evento</th>
-											</tr>
-										</thead>
-										<tbody>
-											{/* Mapea los eventos y muestra las filas correspondientes */}
-											{eventos.map((evento) => (
-												<tr key={evento.id}>
-													<td>{evento.estado_evento}</td>
-													<td>{evento.evidencia_documento}</td>
-													<td>{evento.evidencia_fotografica}</td>
-													<td>{evento.evidencia_textual}</td>
-													<td>{evento.fecha}</td>
-													<td>{evento.tipo_evento}</td>
-												</tr>
-											))}
-										</tbody>
-									</table>
-								) : (
-									<p>No hay datos de eventos para ese equipo para mostrar.</p>
-								)}
-							</React.Fragment>
-						)}
-						{tipoConsultaAleatoria === "calibraciones" && calibraciones && (
-							<React.Fragment>
-								{calibraciones.length > 0 ? (
-									<table>
-										<thead>
-											<tr>
-												<th>Estado</th>
-												<th>Evidencia Documento</th>
-												<th>Evidencia Fotográfica</th>
-												<th>Evidencia Textual</th>
-												<th>Fecha</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>{calibraciones.estado}</td>
-												<td>{calibraciones.evidencia_documento}</td>
-												<td>{calibraciones.evidencia_fotografica}</td>
-												<td>{calibraciones.evidencia_textual}</td>
-												<td>{calibraciones.fecha}</td>
-											</tr>
-										</tbody>
-									</table>
-								) : (<p>No hay datos de calibraciones de ese equipo para mostrar.</p>)}
-							</React.Fragment>
-						)}
-						{tipoConsultaAleatoria === "mantenimientos" && mantenimientos && (
-							<React.Fragment>
-								{mantenimientos.length > 0 ? (
-									<table>
-										<thead>
-											<tr>
-												<th>Estado</th>
-												<th>Evidencia Documento</th>
-												<th>Evidencia Fotográfica</th>
-												<th>Evidencia Textual</th>
-												<th>Fecha</th>
-												<th>Tipo de Mantenimiento</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>{mantenimientos.estado}</td>
-												<td>{mantenimientos.evidencia_documento}</td>
-												<td>{mantenimientos.evidencia_fotografica}</td>
-												<td>{mantenimientos.evidencia_textual}</td>
-												<td>{mantenimientos.fecha}</td>
-												<td>{mantenimientos.tipo_mantenimiento}</td>
-											</tr>
-										</tbody>
-									</table>
-								) : (
-									<p>No hay datos de mantenimientos de ese equipo.</p>
-								)}
-							</React.Fragment>
+						{tipoConsultaAleatoria === "mantenimientos" && showModalMantenimiento && (
+							<div className="ConsultaAleatoriaModalInvima">
+								<Mantenimiento mantenimientos={mantenimientos}/>
+							</div>
 						)}
 					</div>
+				)}
+
+				{(showModalInvima || showModalEvento || showModalCalibracion || showModalMantenimiento) && 
+				(
+					<div className="cerrarModales">
+						<button onClick={() => {
+							setShowModalInvima(false); 
+							setShowModalEvento(false);
+							setShowModalCalibracion(false);
+							setShowModalMantenimiento(false);
+						}}
+							>Cerrar</button>
+						</div>
 				)}
 			</div>
 		</div>

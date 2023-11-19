@@ -25,7 +25,7 @@ function TablaEquiposAreas({ filteredEquipos, onEquipoClick  }) {
           onChange={handleSearchChange}
         />
       </div>
-      <table>
+      <table class="mi-tabla">
         <thead>
           <tr>
             <th>Nombre</th>
