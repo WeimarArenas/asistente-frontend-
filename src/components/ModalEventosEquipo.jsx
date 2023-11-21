@@ -148,7 +148,9 @@ const ModalEventosEquipo = ({ eventosEquipo, editableFieldsEventos, handleChange
 						</div>
 					)}
 					<div className="button-container">
-						<button type="button" onClick={handleSaveChanges}>Guardar</button>
+						<button type="button" onClick={handleSaveChanges} 
+						style={ {backgroundColor: "#4CAF50", fontWeight: "600"}}
+						>Guardar</button>
 					</div>
 				</form>
 			</div>

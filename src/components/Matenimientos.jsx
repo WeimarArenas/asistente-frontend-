@@ -89,7 +89,7 @@ const Mantenimientos = ({ mantenimientos, onSaveChanges }) => {
                         onChange={(e) => setEvidenciaDocumento(e.target.value)}
                         style={{ width: "100%", padding: "8px", margin: "5px 0", boxSizing: "border-box" }}
                     />
-                    <button style={{ padding: "10px", backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "5px", cursor: "pointer" }} onClick={handleSave}>
+                    <button style={{ padding: "10px 20px", backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "5px", cursor: "pointer", fontSize: "16px", fontWeight: "600" }} onClick={handleSave}>
                         Guardar
                     </button>
                 </div>

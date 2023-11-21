@@ -326,7 +326,7 @@ function Areas() {
               mantenimientos={dataMantenimeintos} 
             />
           </div>
-          <div>
+          <div className='modalMnatenimimientosButtonContainer'>
             <button onClick={() => {setShowModalMantenimientos(false)}}>Cerrar</button>
           </div>
         </div>
@@ -336,9 +336,11 @@ function Areas() {
       {showModalCalibraciones && (
         <div className='modalMantenimientos'>
           <Calibraciones calibraciones={dataCalibraciones} />
+          <div className='modalMnatenimimientosButtonContainer'>
           <button onClick={() => {
             setShowModalCalibraciones(false)
           }}>Cerrar</button>
+          </div>
         </div>
       )}
     </div>

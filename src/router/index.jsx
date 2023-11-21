@@ -6,6 +6,7 @@ import NotFound from "../pages/NoFound";
 import Areas from "../pages/Areas";
 import Register from "../pages/Register";
 import ConsultasAleatorias from "../pages/ConsultasAleatorias";
+import NuevasConsultas from "../pages/NuevasConsultas";
 
 export const router = createBrowserRouter([
     {
@@ -28,5 +29,9 @@ export const router = createBrowserRouter([
     {
         path: '/consulta-aleatoria',
         element: <ConsultasAleatorias />
+    },
+    {
+        path: '/nuevas-consultas',
+        element: <NuevasConsultas />
     }
 ])

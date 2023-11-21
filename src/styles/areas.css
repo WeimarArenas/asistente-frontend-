@@ -285,16 +285,12 @@
     margin-bottom: 30px;
 }
 
-
-
 .modalInteriorFormularioEventos{
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
     min-width: 400px;
     max-width: 550px;
     z-index: 9999;
@@ -318,11 +314,13 @@
     padding: 8px 12px;
     font-weight: 600;
     border-radius: 8px;
+    background-color: #4CAF50;
+    color: white;
 }
 
 .cerrarConsultaEvento > button:hover{
     color: white;
-    background-color: #4361ee;
+    background-color: #4CAF50;
 }
 
 .textUpdateEvento{
@@ -350,4 +348,23 @@
     max-height: 400px; /* Ajusta esto según tus necesidades */
     min-height: 200px;
     overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido excede la altura máxima */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.modalMnatenimimientosButtonContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modalMnatenimimientosButtonContainer > button{
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    font-weight: 600;
 }
