@@ -26,7 +26,7 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
         numero_registro: "",
         vigencia: "",
         fecha: "",
-        evidencia_documento: "",
+        evidencia_documento: null,
         evidencia_fotografica: null, 
         evidencia_textual: "",
       });
@@ -108,9 +108,8 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
           <div className="form-group">
             <label>Documentos de evidencia:</label>
             <input
-              type="text"
+              type="file"
               name="evidencia_documento"
-              value={formData.evidencia_documento}
               onChange={handleInputChange}
             />
           </div>
@@ -166,9 +165,8 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
           <div className="form-group">
             <label>Documentos de evidencia:</label>
             <input
-              type="text"
+              type="file"
               name="evidencia_documento"
-              value={formData.evidencia_documento}
               onChange={handleInputChange}
             />
           </div>
