@@ -1,7 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 
-function FormularioRegistroInvima ({ registrosInvima, editableFields, handleChangeEditable, handleSaveChanges }) {
-    const registro = registrosInvima ? registrosInvima[0] : null;
+function FormularioRegistroInvima({ registrosInvima, editableFields, handleChangeEditable }) {
+  const [formData, setFormData] = useState({
+    numero_registro: "",
+    vigencia: "",
+    fecha: "",
+    evidencia_documento: "",
+    evidencia_fotografica: "",
+    evidencia_textual: "",
+  });
+
+  const registro = registrosInvima ? registrosInvima[0] : null;
+
+  const handleSaveChanges = () => {
+    fetch('http://127.0.0.1:5000/equipos/registros-invima', {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...formData,
+        id_equipo: 1, 
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Respuesta del servidor:', data);
+      })
+      .catch(error => {
+        console.error('Error al enviar la solicitud:', error);
+      });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   
     return (
       <form className="form-container">
@@ -13,7 +51,7 @@ function FormularioRegistroInvima ({ registrosInvima, editableFields, handleChan
                 type="text"
                 name="numero_registro"
                 value={editableFields.numero_registro || registro.numero_registro}
-                onChange={handleChangeEditable}
+                onChange={handleInputChange}
               />
             </div>
             <div className="form-group">
@@ -22,7 +60,7 @@ function FormularioRegistroInvima ({ registrosInvima, editableFields, handleChan
                 type="text"
                 name="vigencia"
                 value={editableFields.vigencia || registro.vigencia}
-                onChange={handleChangeEditable}
+                onChange={handleInputChange}
               />
             </div>
             <div className="form-group">
@@ -31,7 +69,7 @@ function FormularioRegistroInvima ({ registrosInvima, editableFields, handleChan
                 type="text"
                 name="fecha"
                 value={editableFields.fecha || registro.fecha}
-                onChange={handleChangeEditable}
+                onChange={handleInputChange}
               />
             </div>
             <div className="form-group">
@@ -40,7 +78,7 @@ function FormularioRegistroInvima ({ registrosInvima, editableFields, handleChan
                 type="text"
                 name="evidencia_documento"
                 value={editableFields.evidencia_documento || registro.evidencia_documento}
-                onChange={handleChangeEditable}
+                onChange={handleInputChange}
               />
             </div>
             <div className="form-group">
@@ -49,7 +87,7 @@ function FormularioRegistroInvima ({ registrosInvima, editableFields, handleChan
                 type="text"
                 name="evidencia_fotografica"
                 value={editableFields.evidencia_fotografica || registro.evidencia_fotografica}
-                onChange={handleChangeEditable}
+                onChange={handleInputChange}
               />
             </div>
             <div className="form-group">
@@ -57,7 +95,7 @@ function FormularioRegistroInvima ({ registrosInvima, editableFields, handleChan
               <textarea
                 name="evidencia_textual"
                 value={editableFields.evidencia_textual || registro.evidencia_textual}
-                onChange={handleChangeEditable}
+                onChange={handleInputChange}
                 rows="4"
                 cols="50"
               />
@@ -65,7 +103,7 @@ function FormularioRegistroInvima ({ registrosInvima, editableFields, handleChan
           </div>
         ) : null}
         <div className="button-container">
-          <button type="button" onClick={handleSaveChanges}>Guardar</button>
+        <button type="button" onClick={handleSaveChanges}>Guardar</button>
         </div>
       </form>
     );
