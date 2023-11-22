@@ -34,24 +34,10 @@ function Areas() {
   const [dataCalibraciones, setDataCalibraciones] = useState(null);
   const [showModalCalibraciones, setShowModalCalibraciones] = useState(false);
 
-  // Edicion del form de registro invima
-  const [editableFields, setEditableFields] = useState({
-    numero_registro: "",
-    vigencia: "",
-    fecha: "",
-    evidencia_textual: "El equipo no cuenta con evidencia textual, por favor inserte una",
-    evidencia_documento: "No se dispone de documentos",
-    evidencia_fotografica: "No se dispone evidencias fotograficas"
-  });
-
   // edicion del form de eventos de equipo
   const handleInputChange = (e, setState) => {
     const { name, value } = e.target;
     setState(prevState => ({ ...prevState, [name]: value }));
-  };
-
-  const handleChangeEditable = (e) => {
-    handleInputChange(e, setEditableFields);
   };
 
   const [editableFieldsEventos, setEditableFieldsEventos] = useState({
@@ -67,22 +53,10 @@ function Areas() {
 
   // render formulario de registro invima
   const renderFormularioRegistrosInvima = () => {
-    const registro = registrosInvima ? registrosInvima[0] : null; // Verificar si registrosInvima está definido
-
-    if (registro == null) {
-      return (
-        <div>
-          <p>El equipo no cuenta con eventos</p>
-        </div>
-      )
-    }
-
     return (
       <FormularioRegistroInvima
         registrosInvima={registrosInvima}
-        editableFields={editableFields}
-        handleChangeEditable={handleChangeEditable}
-        handleSaveChanges={handleSaveChanges}
+        id_equipo={selectedEquipoId.id}
       />
     );
   };
