@@ -18,17 +18,16 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
         vigencia: registro.vigencia,
         fecha: registro.fecha,
         evidencia_documento: registro.evidencia_documento,
-        evidencia_fotografica: null, // Cambiado a null para manejar archivos
+        evidencia_fotografica: null, 
         evidencia_textual: registro.evidencia_textual,
       });
     } else {
-      // Si no hay datos, establecer el formulario con valores predeterminados
       setFormData({
         numero_registro: "",
         vigencia: "",
         fecha: "",
         evidencia_documento: "",
-        evidencia_fotografica: null, // Cambiado a null para manejar archivos
+        evidencia_fotografica: null, 
         evidencia_textual: "",
       });
     }
