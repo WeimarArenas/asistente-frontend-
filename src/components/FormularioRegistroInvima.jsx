@@ -6,20 +6,19 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
     vigencia: "",
     fecha: "",
     evidencia_documento: "",
-    evidencia_fotografica: "",
+    evidencia_fotografica: null,
     evidencia_textual: "",
   });
 
   useEffect(() => {
     if (registrosInvima && registrosInvima.length > 0) {
-      // Si hay datos existentes, establecer el formulario con esos datos
       const registro = registrosInvima[0];
       setFormData({
         numero_registro: registro.numero_registro,
         vigencia: registro.vigencia,
         fecha: registro.fecha,
         evidencia_documento: registro.evidencia_documento,
-        evidencia_fotografica: registro.evidencia_fotografica,
+        evidencia_fotografica: null, // Cambiado a null para manejar archivos
         evidencia_textual: registro.evidencia_textual,
       });
     } else {
@@ -29,7 +28,7 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
         vigencia: "",
         fecha: "",
         evidencia_documento: "",
-        evidencia_fotografica: "",
+        evidencia_fotografica: null, // Cambiado a null para manejar archivos
         evidencia_textual: "",
       });
     }
@@ -39,18 +38,21 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
     const apiUrl = registrosInvima && registrosInvima.length > 0
       ? `http://127.0.0.1:5000/equipos/registros-invima/${registrosInvima[0].id}`
       : 'http://127.0.0.1:5000/equipos/registros-invima';
-
+  
     const method = registrosInvima && registrosInvima.length > 0 ? 'PUT' : 'POST';
-
+  
+    const formDataToSend = new FormData();
+    formDataToSend.append("numero_registro", formData.numero_registro);
+    formDataToSend.append("vigencia", formData.vigencia);
+    formDataToSend.append("fecha", formData.fecha);
+    formDataToSend.append("evidencia_documento", formData.evidencia_documento);
+    formDataToSend.append("evidencia_fotografica", formData.evidencia_fotografica);
+    formDataToSend.append("evidencia_textual", formData.evidencia_textual);
+    formDataToSend.append("id_equipo", id_equipo);
+  
     fetch(apiUrl, {
       method: method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...formData,
-        id_equipo: id_equipo,
-      }),
+      body: formDataToSend,
     })
       .then(response => response.json())
       .then(data => {
@@ -62,10 +64,14 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    
+    // Si es un input de tipo file, guarda el archivo en el estado
+    const inputValue = type === "file" ? e.target.files[0] : value;
+  
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: inputValue,
     });
   };
 
@@ -112,9 +118,8 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
           <div className="form-group">
             <label>Evidencia fotográfica:</label>
             <input
-              type="text"
+              type="file"
               name="evidencia_fotografica"
-              value={formData.evidencia_fotografica}
               onChange={handleInputChange}
             />
           </div>
@@ -171,9 +176,8 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
           <div className="form-group">
             <label>Evidencia fotográfica:</label>
             <input
-              type="text"
+              type="file"
               name="evidencia_fotografica"
-              value={formData.evidencia_fotografica}
               onChange={handleInputChange}
             />
           </div>
