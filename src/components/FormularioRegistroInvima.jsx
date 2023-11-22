@@ -36,7 +36,7 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
   const handleSaveChanges = () => {
     const apiUrl = registrosInvima && registrosInvima.length > 0
       ? `http://127.0.0.1:5000/equipos/registros-invima/${registrosInvima[0].id}`
-      : 'http://127.0.0.1:5000/equipos/registros-invima';
+      : `http://127.0.0.1:5000/equipos/registros-invima/${registrosInvima[0].id}`;
   
     const method = registrosInvima && registrosInvima.length > 0 ? 'PUT' : 'POST';
   
@@ -164,19 +164,11 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
           </div>
           <div className="form-group">
             <label>Documentos de evidencia:</label>
-            <input
-              type="file"
-              name="evidencia_documento"
-              onChange={handleInputChange}
-            />
+           <button>Descargar documento de evidencia</button>   
           </div>
           <div className="form-group">
             <label>Evidencia fotográfica:</label>
-            <input
-              type="file"
-              name="evidencia_fotografica"
-              onChange={handleInputChange}
-            />
+            <button>Descargar Evidencia fotografica</button>
           </div>
           <div className="form-group">
             <label>Evidencia Textual:</label>
