@@ -34,22 +34,6 @@ function Areas() {
   const [dataCalibraciones, setDataCalibraciones] = useState(null);
   const [showModalCalibraciones, setShowModalCalibraciones] = useState(false);
 
-  // edicion del form de eventos de equipo
-  const handleInputChange = (e, setState) => {
-    const { name, value } = e.target;
-    setState(prevState => ({ ...prevState, [name]: value }));
-  };
-
-  const [editableFieldsEventos, setEditableFieldsEventos] = useState({
-    fecha: Date.now()
-  });
-
-  const handleChangeEditableEventos = (e) => {
-    handleInputChange(e, setEditableFieldsEventos);
-  };
-
-  const handleSaveChanges = () => {
-  };
 
   // render formulario de registro invima
   const renderFormularioRegistrosInvima = () => {
@@ -68,10 +52,7 @@ function Areas() {
     return (
       <ModalEventosEquipo
         eventosEquipo={eventosEquipo}
-        editableFieldsEventos={editableFieldsEventos}
-        handleChangeEditableEventos={handleChangeEditableEventos}
-        handleSaveChanges={handleSaveChanges}
-        handleCloseModal={() => setShowModalEventosEquipo(false)}
+        id_equipo={selectedEquipoId.id}
       />
     );
   };
