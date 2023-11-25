@@ -50,7 +50,7 @@ const Eventos = ({ eventosEquipo }) => {
 							<div className="form-group">
 								<label>Evidencia Documento:</label>
 								<input
-									type="text"
+									type="file"
 									name="evidencia_documento"
 									value={registro.evidencia_documento}
 								/>
@@ -58,7 +58,7 @@ const Eventos = ({ eventosEquipo }) => {
 							<div className="form-group">
 								<label>Evidencia Fotográfica:</label>
 								<input
-									type="text"
+									type="file"
 									name="evidencia_fotografica"
 									value={registro.evidencia_fotografica}
 								/>
@@ -98,17 +98,17 @@ const Eventos = ({ eventosEquipo }) => {
 							<div className="form-group">
 								<label>Evidencia Documento:</label>
 								<input
-									type="text"
+									type="file"
 									name="evidencia_documento"
-									value="Sin evidencia"
+									
 								/>
 							</div>
 							<div className="form-group">
 								<label>Evidencia Fotográfica:</label>
 								<input
-									type="text"
+									type="file"
 									name="evidencia_fotografica"
-									value="Sin evidencia"
+									
 								/>
 							</div>
 							<div className="form-group">

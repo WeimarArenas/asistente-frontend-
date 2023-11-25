@@ -60,14 +60,14 @@ const Mantenimiento = ({ mantenimientos }) => {
 					/>
 					<label style={{ display: "block" }}>Evidencia fotográfica:</label>
 					<input
-						type="text"
+						type="file"
 						value={evidenciaFotografica}
 						onChange={(e) => setEvidenciaFotografica(e.target.value)}
 						style={{ width: "100%", padding: "8px", margin: "5px 0", boxSizing: "border-box" }}
 					/>
 					<label style={{ display: "block" }}>Evidencia textual:</label>
 					<input
-						type="text"
+						type="file"
 						value={evidenciaTextual}
 						onChange={(e) => setEvidenciaTextual(e.target.value)}
 						style={{ width: "100%", padding: "8px", margin: "5px 0", boxSizing: "border-box" }}

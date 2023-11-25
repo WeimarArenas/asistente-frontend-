@@ -35,7 +35,7 @@ function Invima({ registrosInvima }) {
 					<div className="form-group">
 						<label>Documentos de evidencia:</label>
 						<input
-							type="text"
+							type="file"
 							name="evidencia_documento"
 							value={registro.evidencia_documento}
  
@@ -44,7 +44,7 @@ function Invima({ registrosInvima }) {
 					<div className="form-group">
 						<label>Evidencia fotográfica:</label>
 						<input
-							type="text"
+							type="file"
 							name="evidencia_fotografica"
 							value={registro.evidencia_fotografica}
  
@@ -88,7 +88,7 @@ function Invima({ registrosInvima }) {
 			<div className="form-group">
 				<label>Documentos de evidencia:</label>
 				<input
-					type="text"
+					type="file"
 					name="evidencia_documento"
 					value="Evidencia Documento"
 
@@ -97,7 +97,7 @@ function Invima({ registrosInvima }) {
 			<div className="form-group">
 				<label>Evidencia fotográfica:</label>
 				<input
-					type="text"
+					type="file"
 					name="evidencia_fotografica"
 					value="Evidencia Fotografica"
 
