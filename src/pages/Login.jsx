@@ -1,5 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import React, { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // importo los estilos css
 import '../styles/login.css';
@@ -10,6 +12,18 @@ function Login() {
     const [correo, setCorreo] = useState('');
     const [clave, setClave] = useState('');
     const [ingresoIntentado, setIngresoIntentado] = useState(false);
+
+    const notifySuccess = () => {
+        toast.success("¡Inicio de sesión exitoso!", {
+            position: toast.POSITION.TOP_CENTER
+        });
+    };
+
+    const notifyError = () => {
+        toast.error("Error al iniciar sesión. Usuario no verificado.", {
+            position: toast.POSITION.TOP_CENTER
+        });
+    };
 
     const handleLogin = async () => {
         // Supongamos que response es la respuesta de la API
@@ -24,13 +38,16 @@ function Login() {
         setIngresoIntentado(true);
 
         if (usuarioVerificado) {
-            // Usuario verificado, redirigir a la página de inicio
-            navigate("/Home");
+            notifySuccess();
+            setTimeout(() => {
+                navigate("/Home");
+            }, 1500);
         } else {
             // Usuario no verificado, mostrar un mensaje o tomar otra acción
             setVerificado(false);
+            notifyError();
         }
-    };
+    }
 
     return (
         <div className="containerCardLogin">
@@ -66,7 +83,7 @@ function Login() {
                     </div>
                 </div>
                 <div className="cardLoginButton">
-                    <button className="cardLoginButtonLogin" onClick={handleLogin}>
+                    <button className="cardLoginButtonLogin" onClick={() => { handleLogin(); }}>
                         Ingresar
                     </button>
 
@@ -75,9 +92,12 @@ function Login() {
             <div>
                 <div className="mensajeVerificacion">
                     {ingresoIntentado && verificado === false && (
-                        <p style={{ color: 'red', textAlign: 'center' }}>
-                            Usuario no verificado. No se puede acceder.
-                        </p>
+                        <div>
+                            <p style={{ color: 'red', textAlign: 'center' }}>
+                                Usuario no verificado. No se puede acceder.
+                            </p>
+                            <ToastContainer />
+                        </div>
                     )}
                 </div>
                 <div style={{ background: '#ededed', width: '80%' }}>
@@ -91,6 +111,6 @@ function Login() {
             </div>
         </div>
     );
-}
+};
 
 export default Login;

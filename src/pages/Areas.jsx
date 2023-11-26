@@ -34,21 +34,17 @@ function Areas() {
   const [dataCalibraciones, setDataCalibraciones] = useState(null);
   const [showModalCalibraciones, setShowModalCalibraciones] = useState(false);
 
-
-  // render formulario de registro invima
   const renderFormularioRegistrosInvima = () => {
     return (
       <FormularioRegistroInvima
         registrosInvima={registrosInvima}
         id_equipo={selectedEquipoId.id}
+        onCloseFormulario={closeFormulario}
       />
     );
   };
 
-  // render form de eventos de los equipos
   const renderModalEventosEquipo = () => {
-
-
     return (
       <ModalEventosEquipo
         eventosEquipo={eventosEquipo}
@@ -64,6 +60,7 @@ function Areas() {
     setSelectedEquipoId(equipoId);
   };
 
+  // cerrar modal con todas las consultas 
   const closeModal = () => {
     setShowModalEquipo(false);
     setSelectedEquipoId(null);
@@ -71,7 +68,6 @@ function Areas() {
 
   const handleEquipoClick = (equipoId) => {
     openModal(equipoId);
-    // Puedes realizar otras acciones según sea necesario
   };
 
   const handleConsultarAreas = () => {
@@ -95,11 +91,10 @@ function Areas() {
     setShowModal(false);
   };
 
-  // hangler de los 4 tipos de consultas posibles
   const handleConsultaClick = (tipoConsulta) => {
 
     // Hacer la solicitud HTTP según el tipo de consulta
-    const idEquipo = selectedEquipoId.id; // Obtener el ID del equipo
+    const idEquipo = selectedEquipoId.id;
     let endpoint;
 
     switch (tipoConsulta) {
@@ -162,6 +157,16 @@ function Areas() {
     }
   }, [tipoConsulta, selectedEquipoId]);
 
+  const closeFormulario = () => {
+    setShowTablaRegistrosInvima(false);
+    setConfirmacionVigencia(null);
+    setShowModalEventosEquipo(false);
+    setEventosEquipos(false);
+    setGenerarEventoEquipo(null)
+    setShowModalCalibraciones(false)
+    setShowModalMantenimientos(false)
+  };
+
   return (
     <div>
       <Header />
@@ -213,7 +218,6 @@ function Areas() {
         </div>
       )}
 
-      {/* Para mostrar el modal de la consulta de registro invima */}
       {showTablaRegistrosInvima && (
         <div className="modalFormularioRegistrosInvima">
           <div className="modal-content">
@@ -247,15 +251,13 @@ function Areas() {
             </div>
             <div className='modal-content-consulta-button-close'>
               <button onClick={() => {
-                setShowTablaRegistrosInvima(false);
-                setConfirmacionVigencia(null);
+                closeFormulario();
               }}>Cerrar Formulario</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Para mostrar el modal de la consulta de eventos */}
       {showModalEventosEquipo && (
         <div className="modalFormularioEventos">
           <p className='modalFormularioEventosTittle'>Eventos: {selectedEquipoId.nombre}</p>
@@ -265,15 +267,12 @@ function Areas() {
           </div>
           <div className='cerrarConsultaEvento'>
             <button onClick={() => {
-              setShowModalEventosEquipo(false);
-              setEventosEquipos(false);
-              setGenerarEventoEquipo(null)
+              closeFormulario();
             }}>Cerrar Formulario</button>
           </div>
         </div>
       )}
 
-      {/* Modal para el formulario y consultas de mantenimientos */}
       {showModalMantenimientos && (
         <div className='modalMantenimientos'>
           <div>
@@ -283,18 +282,17 @@ function Areas() {
             />
           </div>
           <div className='modalMnatenimimientosButtonContainer'>
-            <button onClick={() => {setShowModalMantenimientos(false)}}>Cerrar</button>
+            <button onClick={() => {closeFormulario()}}>Cerrar</button>
           </div>
         </div>
       )}
 
-      {/*Modal de formulario de calibraciones */}
       {showModalCalibraciones && (
         <div className='modalMantenimientos'>
           <Calibraciones calibraciones={dataCalibraciones} />
           <div className='modalMnatenimimientosButtonContainer'>
           <button onClick={() => {
-            setShowModalCalibraciones(false)
+            closeFormulario();
           }}>Cerrar</button>
           </div>
         </div>

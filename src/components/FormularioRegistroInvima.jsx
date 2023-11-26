@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
+function FormularioRegistroInvima({ registrosInvima, id_equipo, onCloseFormulario }) {
   const [formData, setFormData] = useState({
     numero_registro: "",
     vigencia: "",
@@ -9,6 +11,18 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
     evidencia_fotografica: null,
     evidencia_textual: "",
   });
+
+  const notifySuccess = () => {
+    toast.success("Guardado con Exito!!", {
+        position: toast.POSITION.TOP_CENTER
+    });
+};
+
+const notifyError = () => {
+    toast.error("Debe de llenar todos los datos del formulario", {
+        position: toast.POSITION.TOP_CENTER
+    });
+};
 
   useEffect(() => {
     if (registrosInvima && registrosInvima.length > 0) {
@@ -56,9 +70,14 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
       .then(response => response.json())
       .then(data => {
         console.log('Respuesta del servidor:', data);
+        notifySuccess();
+        setTimeout(() => {
+          onCloseFormulario();
+      }, 1700);
       })
       .catch(error => {
         console.error('Error al enviar la solicitud:', error);
+        notifyError();
       });
   };
 
@@ -185,6 +204,7 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
       )}
       <div className="button-container">
         <button type="button" onClick={handleSaveChanges}>Guardar</button>
+        <ToastContainer />
       </div>
     </form>
   );
