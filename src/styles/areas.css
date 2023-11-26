@@ -345,8 +345,8 @@
     padding: 20px 40px;
     border-radius: 10px;
     /* Establece una altura máxima y activa el desplazamiento vertical */
-    max-height: 400px; /* Ajusta esto según tus necesidades */
-    min-height: 200px;
+    max-height: 700px; /* Ajusta esto según tus necesidades */
+    min-height: 500px;
     overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido excede la altura máxima */
     display: flex;
     flex-direction: column;

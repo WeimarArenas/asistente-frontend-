@@ -5,7 +5,7 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo }) {
     numero_registro: "",
     vigencia: "",
     fecha: "",
-    evidencia_documento: "",
+    evidencia_documento: null,
     evidencia_fotografica: null,
     evidencia_textual: "",
   });

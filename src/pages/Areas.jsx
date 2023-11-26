@@ -279,6 +279,7 @@ function Areas() {
           <div>
             <Mantenimientos 
               mantenimientos={dataMantenimeintos} 
+              id_equipo={selectedEquipoId.id}
             />
           </div>
           <div className='modalMnatenimimientosButtonContainer'>
