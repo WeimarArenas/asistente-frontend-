@@ -1,7 +1,7 @@
+import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, Link } from "react-router-dom";
 import React, { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 // importo los estilos css
 import '../styles/login.css';
@@ -26,15 +26,13 @@ function Login() {
     };
 
     const handleLogin = async () => {
-        // Supongamos que response es la respuesta de la API
         const response = await fetch(`http://127.0.0.1:5000/usuarios/${correo}/${clave}`);
         const data = await response.json();
 
-        // Verificar si el usuario está verificado
         const usuario = data.usuario && data.usuario.length > 0 ? data.usuario[0] : null;
         const usuarioVerificado = usuario && usuario.verificado === 1;
 
-        setVerificado(!usuarioVerificado);
+        setVerificado(usuarioVerificado);
         setIngresoIntentado(true);
 
         if (usuarioVerificado) {
@@ -43,7 +41,6 @@ function Login() {
                 navigate("/Home");
             }, 1500);
         } else {
-            // Usuario no verificado, mostrar un mensaje o tomar otra acción
             setVerificado(false);
             notifyError();
         }
@@ -100,6 +97,7 @@ function Login() {
                         </div>
                     )}
                 </div>
+                <ToastContainer />
                 <div style={{ background: '#ededed', width: '80%' }}>
                     <div className="cardRegister1">
                         <p>Si no posee una cuenta puede registrarse</p>

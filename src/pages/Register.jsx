@@ -9,7 +9,6 @@ function Register() {
 
     // Estados para los campos del formulario
     const [nombre, setNombre] = useState("");
-    const [usuario, setUsuario] = useState("");
     const [clave, setClave] = useState("");
     const [correo, setCorreo] = useState("");
 
@@ -20,7 +19,7 @@ function Register() {
     const handleRegister = async () => {
 
         // validar que los campos del formular no esten vacios
-        if (!nombre || !usuario || !clave || !correo) {
+        if (!nombre || !clave || !correo) {
             console.error("Todos los campos son obligatorios");
             return;
         }
@@ -28,7 +27,6 @@ function Register() {
         // Construir el objeto de usuario a enviar al servidor
         const newUser = {
             nombre: nombre,
-            usuario: usuario,
             clave: clave,
             correo: correo
         };
@@ -68,7 +66,6 @@ function Register() {
     useEffect(() => {
         if (!showSuccessModal) {
             setNombre("");
-            setUsuario("");
             setClave("");
             setCorreo("");
         }
@@ -84,14 +81,6 @@ function Register() {
                             type="text"
                             value={nombre}
                             onChange={(e) => setNombre(e.target.value)}
-                        />
-                    </div>
-                    <div className="cardRegisterInputUser">
-                        <p style={{ marginBottom: "12px" }}>Usuario</p>
-                        <input
-                            type="text"
-                            value={usuario}
-                            onChange={(e) => setUsuario(e.target.value)}
                         />
                     </div>
                     <div className="cardRegisterInputPassword">

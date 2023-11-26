@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { FormatFecha } from '../assets/FormatDate'
+
 function FormularioRegistroInvima({ registrosInvima, id_equipo, onCloseFormulario }) {
   const [formData, setFormData] = useState({
     numero_registro: "",
@@ -14,15 +16,15 @@ function FormularioRegistroInvima({ registrosInvima, id_equipo, onCloseFormulari
 
   const notifySuccess = () => {
     toast.success("Guardado con Exito!!", {
-        position: toast.POSITION.TOP_CENTER
+      position: toast.POSITION.TOP_CENTER
     });
-};
+  };
 
-const notifyError = () => {
+  const notifyError = () => {
     toast.error("Debe de llenar todos los datos del formulario", {
-        position: toast.POSITION.TOP_CENTER
+      position: toast.POSITION.TOP_CENTER
     });
-};
+  };
 
   useEffect(() => {
     if (registrosInvima && registrosInvima.length > 0) {
@@ -32,8 +34,9 @@ const notifyError = () => {
         vigencia: registro.vigencia,
         fecha: registro.fecha,
         evidencia_documento: registro.evidencia_documento,
-        evidencia_fotografica: null, 
+        evidencia_fotografica: registro.evidencia_fotografica,
         evidencia_textual: registro.evidencia_textual,
+        id_equipo: id_equipo
       });
     } else {
       setFormData({
@@ -41,28 +44,47 @@ const notifyError = () => {
         vigencia: "",
         fecha: "",
         evidencia_documento: null,
-        evidencia_fotografica: null, 
+        evidencia_fotografica: null,
         evidencia_textual: "",
+        id_equipo: id_equipo
       });
     }
   }, [registrosInvima]);
 
+  const handleInputChange = (e) => {
+    const { name, type } = e.target;
+
+    // Si es un input de tipo file, guarda el archivo en el estado
+    const inputValue = type === "file" ? e.target.files[0] : e.target.value;
+
+    setFormData({
+      ...formData,
+      [name]: inputValue,
+    });
+  };
+
   const handleSaveChanges = () => {
     const apiUrl = registrosInvima && registrosInvima.length > 0
-      ? `http://127.0.0.1:5000/equipos/registros-invima/${registrosInvima[0].id}`
-      : `http://127.0.0.1:5000/equipos/registros-invima/${registrosInvima[0].id}`;
-  
-    const method = registrosInvima && registrosInvima.length > 0 ? 'PUT' : 'POST';
-  
+      ? `http://127.0.0.1:5000/equipos/registros-invima`
+      : `http://127.0.0.1:5000/equipos/registros-invima`;
+
+    const method = registrosInvima && registrosInvima.length > 0 ? 'POST' : 'POST';
+
     const formDataToSend = new FormData();
     formDataToSend.append("numero_registro", formData.numero_registro);
-    formDataToSend.append("vigencia", formData.vigencia);
-    formDataToSend.append("fecha", formData.fecha);
-    formDataToSend.append("evidencia_documento", formData.evidencia_documento);
-    formDataToSend.append("evidencia_fotografica", formData.evidencia_fotografica);
+    formDataToSend.append("vigencia", FormatFecha(formData.vigencia));
+  formDataToSend.append("fecha", FormatFecha(formData.fecha));
     formDataToSend.append("evidencia_textual", formData.evidencia_textual);
     formDataToSend.append("id_equipo", id_equipo);
-  
+
+    if (formData.evidencia_documento) {
+      formDataToSend.append("evidencia_documento", formData.evidencia_documento);
+    }
+
+    if (formData.evidencia_fotografica) {
+      formDataToSend.append("evidencia_fotografica", formData.evidencia_fotografica);
+    }
+
     fetch(apiUrl, {
       method: method,
       body: formDataToSend,
@@ -73,24 +95,12 @@ const notifyError = () => {
         notifySuccess();
         setTimeout(() => {
           onCloseFormulario();
-      }, 1700);
+        }, 1700);
       })
       .catch(error => {
         console.error('Error al enviar la solicitud:', error);
         notifyError();
       });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value, type } = e.target;
-    
-    // Si es un input de tipo file, guarda el archivo en el estado
-    const inputValue = type === "file" ? e.target.files[0] : value;
-  
-    setFormData({
-      ...formData,
-      [name]: inputValue,
-    });
   };
 
   return (
@@ -109,18 +119,18 @@ const notifyError = () => {
           <div className="form-group">
             <label>Vigencia:</label>
             <input
-              type="text"
+              type="date"
               name="vigencia"
-              value={formData.vigencia}
+              value={FormatFecha(formData.vigencia)}
               onChange={handleInputChange}
             />
           </div>
           <div className="form-group">
             <label>Fecha:</label>
             <input
-              type="text"
+              type="date"
               name="fecha"
-              value={formData.fecha}
+              value={FormatFecha(formData.fecha)}
               onChange={handleInputChange}
             />
           </div>
@@ -166,28 +176,36 @@ const notifyError = () => {
           <div className="form-group">
             <label>Vigencia:</label>
             <input
-              type="text"
+              type="date"
               name="vigencia"
-              value={formData.vigencia}
+              value={FormatFecha(formData.vigencia)}
               onChange={handleInputChange}
             />
           </div>
           <div className="form-group">
             <label>Fecha:</label>
             <input
-              type="text"
+              type="date"
               name="fecha"
-              value={formData.fecha}
+              value={FormatFecha(formData.fecha)}
               onChange={handleInputChange}
             />
           </div>
           <div className="form-group">
             <label>Documentos de evidencia:</label>
-           <button>Descargar documento de evidencia</button>   
+            <input
+              type="file"
+              name="evidencia_documento"
+              onChange={handleInputChange}
+            />
           </div>
           <div className="form-group">
             <label>Evidencia fotográfica:</label>
-            <button>Descargar Evidencia fotografica</button>
+            <input
+              type="file"
+              name="evidencia_fotografica"
+              onChange={handleInputChange}
+            />
           </div>
           <div className="form-group">
             <label>Evidencia Textual:</label>

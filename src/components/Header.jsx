@@ -12,7 +12,6 @@ function Header() {
             <li><Link to="/areas">Manual</Link></li>
           </ul>
         </li>
-        <li><Link>Reportes mensuales</Link></li>
         <li><Link to="/nuevas-consultas">Nuevas consultas</Link></li>
         <li><Link to="/" className='headerMenuItemEnd'>Salir</Link></li>
       </ul>
